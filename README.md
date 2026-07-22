@@ -7,7 +7,9 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
 ## ⚡ Főbb Funkciók
 
 * 💬 **P2P Beszélgetések & Topikok**: Valós idejű üzenetküldés közvetlenül a résztvevők böngészői között.
-* 📌 **Rögzített Üzenetek (Pinned Messages)**: Üzenetek kitűzése a jobb oldali oldalsávra (1-kattintásos ugrással az üzenethez).
+* 📌 **Rögzített Üzenetek & Média Felugró Ablak (Modal Window)**:
+  * Kényelmes felugró ablak a pineknek és médiafájloknak (nem foglal helyet a felületen).
+  * 1-kattintásos ugrás az üzenetekhez közvetlenül az ablakból.
 * 📁 **Média & Csatolmányok Füle**: Képek, videók és fájlok külön oldalsáv fülön való böngészése.
 * 📁 **Korlátlan Fájl- és Videómegosztás**: Közvetlen P2P adatátvitel a háttérben, méretkorlát nélkül.
 * 🫨 **MSN Nudge / Rezgetés**: Megrezgetheted a topikban lévő többiek ablakát a klasszikus MSN Messenger stílusában!

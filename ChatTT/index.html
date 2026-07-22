@@ -196,20 +196,13 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 260px 1fr auto;
+            grid-template-columns: 260px 1fr;
             gap: 20px;
         }
 
-        .main-content.right-panel-closed {
-            grid-template-columns: 260px 1fr;
-        }
-
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
-            }
-            .right-panel {
-                width: 100% !important;
             }
         }
 
@@ -953,7 +946,7 @@
                     <h3 id="current-topic-name">Válassz egy topikot</h3>
                     <div style="display: flex; gap: 8px;">
                         <button id="export-txt-btn" class="btn btn-primary" onclick="exportTopicToTxt()" style="display: none; font-size: 13px;">📥 Mentés TXT-ként</button>
-                        <button id="right-panel-toggle-btn" class="btn" onclick="toggleRightPanel()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="📌 Rögzített üzenetek & Média oldalsáv be/kikapcsolása">📌 Rögzítettek & Média</button>
+                        <button id="right-panel-toggle-btn" class="btn" onclick="openPinsMediaModal()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="📌 Rögzített üzenetek & Média felugró ablak megnyitása">📌 Rögzítettek & Média</button>
                     </div>
                 </div>
                 <div class="messages" id="messages"></div>
@@ -983,22 +976,24 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- RIGHT PANEL SIDEBAR: Pinned Messages & Media Files Tabs -->
-            <div class="right-panel" id="right-panel">
-                <div class="right-panel-header">
-                    <div class="right-panel-tabs">
-                        <button class="right-tab active" id="tab-btn-pins" onclick="switchRightTab('pins')">📌 Pined (<span id="pins-count">0</span>)</button>
-                        <button class="right-tab" id="tab-btn-media" onclick="switchRightTab('media')">📁 Média (<span id="media-count">0</span>)</button>
-                    </div>
-                    <button onclick="toggleRightPanel()" style="background: transparent; border: none; font-size: 16px; cursor: pointer; color: inherit;" title="Bezárás">✖</button>
+    <!-- Pinned Messages & Media Files Modal Popup -->
+    <div id="pins-media-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000;">
+        <div class="modal-content" style="max-width: 650px; width: 90%; max-height: 85vh; text-align: left; background: var(--card-bg); color: var(--text-color); border-radius: 12px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.35); display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--input-border); padding-bottom: 10px;">
+                <div class="right-panel-tabs">
+                    <button class="right-tab active" id="tab-btn-pins" onclick="switchRightTab('pins')">📌 Rögzített Üzenetek (<span id="pins-count">0</span>)</button>
+                    <button class="right-tab" id="tab-btn-media" onclick="switchRightTab('media')">📁 Média & Fájlok (<span id="media-count">0</span>)</button>
                 </div>
-                <div class="right-panel-body" id="right-tab-content-pins">
-                    <div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek rögzített üzenetek ebben a topikban.<br><br><i>Kattints az üzenetek melletti 📌 ikonra a kitűzéshez!</i></div>
-                </div>
-                <div class="right-panel-body" id="right-tab-content-media" style="display: none;">
-                    <div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek feltöltött fájlok ebben a topikban.</div>
-                </div>
+                <button onclick="closePinsMediaModal()" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: inherit;" title="Bezárás">✖</button>
+            </div>
+            <div class="right-panel-body" id="right-tab-content-pins" style="max-height: 60vh;">
+                <div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek rögzített üzenetek ebben a topikban.<br><br><i>Kattints az üzenetek melletti 📌 ikonra a kitűzéshez!</i></div>
+            </div>
+            <div class="right-panel-body" id="right-tab-content-media" style="display: none; max-height: 60vh;">
+                <div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek feltöltött fájlok ebben a topikban.</div>
             </div>
         </div>
     </div>
@@ -1036,7 +1031,6 @@
             loadHostedFiles();
             updateSoundButton();
             loadSoundType();
-            updateRightPanelVisibility();
             
             const savedUsername = localStorage.getItem('p2p_username');
             const savedPeerId = localStorage.getItem('p2p_peer_id') || '1';
@@ -1231,34 +1225,21 @@
             showNotification(msg);
         }
 
-        // Right Panel Sidebar functions (Pinned Messages & Media Files)
-        function toggleRightPanel() {
-            rightPanelOpen = !rightPanelOpen;
-            localStorage.setItem('p2p_right_panel_open', rightPanelOpen ? 'true' : 'false');
-            updateRightPanelVisibility();
+        // Pinned Messages & Media Files Modal functions
+        function openPinsMediaModal() {
+            renderRightPanel();
+            const modal = document.getElementById('pins-media-modal');
+            if (modal) modal.style.display = 'flex';
         }
 
-        function updateRightPanelVisibility() {
-            const panel = document.getElementById('right-panel');
-            const layout = document.querySelector('.main-content');
-            const btn = document.getElementById('right-panel-toggle-btn');
-            
-            if (panel) {
-                panel.style.display = rightPanelOpen ? 'flex' : 'none';
-            }
-            if (layout) {
-                if (rightPanelOpen) {
-                    layout.classList.remove('right-panel-closed');
-                } else {
-                    layout.classList.add('right-panel-closed');
-                }
-            }
-            if (btn) {
-                btn.style.opacity = rightPanelOpen ? '1' : '0.65';
-            }
-            if (rightPanelOpen) {
-                renderRightPanel();
-            }
+        function closePinsMediaModal() {
+            const modal = document.getElementById('pins-media-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function jumpToMessageFromModal(msgId) {
+            closePinsMediaModal();
+            jumpToMessage(msgId);
         }
 
         function switchRightTab(tabName) {
@@ -1298,7 +1279,7 @@
             });
 
             if (msg.pinned) {
-                showNotification('📌 Üzenet rögzítve az oldalsávra!');
+                showNotification('📌 Üzenet rögzítve!');
             } else {
                 showNotification('📌 Üzenet rögzítése feloldva.');
             }
@@ -1339,7 +1320,7 @@
                         const timeStr = dateObj.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                         const shortText = msg.content ? msg.content.substring(0, 100) : (msg.attachment ? `📎 ${msg.attachment.name}` : '');
 
-                        card.onclick = () => jumpToMessage(msg.id);
+                        card.onclick = () => jumpToMessageFromModal(msg.id);
                         card.innerHTML = `
                             <div class="pinned-meta">
                                 <span><strong>@${escapeHtml(msg.username)}</strong> • ${timeStr}</span>
@@ -1372,7 +1353,7 @@
                             const fileObj = fileId ? hostedFiles[fileId] : (msg.attachment.data ? msg.attachment : null);
                             
                             if (fileObj && fileObj.type && fileObj.type.startsWith('image/')) {
-                                mediaContentHtml = `<img src="${fileObj.data}" alt="${escapeHtml(fileObj.name)}" onclick="jumpToMessage('${msg.id}')" title="Ugrás az üzenethez">`;
+                                mediaContentHtml = `<img src="${fileObj.data}" alt="${escapeHtml(fileObj.name)}" onclick="jumpToMessageFromModal('${msg.id}')" title="Ugrás az üzenethez">`;
                             } else {
                                 mediaContentHtml = `<div>📎 <strong>${escapeHtml(msg.attachment.name)}</strong> (${formatFileSize(msg.attachment.size)})</div>`;
                             }
@@ -1386,7 +1367,7 @@
                         card.innerHTML = `
                             <div style="display: flex; justify-content: space-between; font-size: 11px; opacity: 0.75;">
                                 <span><strong>@${escapeHtml(msg.username)}</strong> • ${timeStr}</span>
-                                <button onclick="jumpToMessage('${msg.id}')" style="background: transparent; border: none; cursor: pointer; color: var(--primary-color); font-weight: bold;">Ugrás 🎯</button>
+                                <button onclick="jumpToMessageFromModal('${msg.id}')" style="background: transparent; border: none; cursor: pointer; color: var(--primary-color); font-weight: bold;">Ugrás 🎯</button>
                             </div>
                             ${mediaContentHtml}
                         `;
