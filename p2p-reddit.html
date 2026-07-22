@@ -346,11 +346,11 @@
         }
 
         .message {
-            padding: 10px 15px;
+            padding: 10px 14px;
             margin-bottom: 10px;
             border-radius: 8px;
-            background: var(--card-bg);
-            color: var(--text-color);
+            background: var(--other-msg-bg, var(--card-bg));
+            color: var(--other-msg-text, var(--text-color));
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
@@ -372,16 +372,17 @@
         }
 
         .message.own {
-            background: var(--primary-color);
-            color: white;
+            background: var(--own-msg-bg, var(--primary-color));
+            color: var(--own-msg-text, #ffffff);
         }
 
         .message.own .username {
-            color: white;
+            color: var(--own-msg-text, #ffffff);
         }
 
         .message.own .timestamp {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--own-msg-text, #ffffff);
+            opacity: 0.75;
         }
 
         .file-preview {
@@ -1231,6 +1232,9 @@
             const bgGrad = `linear-gradient(135deg, ${hexColor} 0%, ${adjustColor(hexColor, -40)} 100%)`;
             document.documentElement.style.setProperty('--bg-gradient', bgGrad);
             
+            document.documentElement.style.setProperty('--own-msg-bg', hexColor);
+            document.documentElement.style.setProperty('--own-msg-text', '#ffffff');
+
             localStorage.setItem('p2p_theme', 'custom');
             localStorage.setItem('p2p_custom_color', hexColor);
             
