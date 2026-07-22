@@ -1,0 +1,628 @@
+2026-07-02 13:43:42: WARNING[Main]: MINETEST_USER_PATH is deprecated, use LUANTI_USER_PATH instead.
+2026-07-02 13:43:42: WARNING[Main]: Mod name conflict detected: "farming"
+2026-07-02 13:43:42: WARNING[Main]: Will not load: /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/minetest_game/farming
+2026-07-02 13:43:42: WARNING[Main]: Overridden by: /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/farming
+2026-07-02 13:43:42: ACTION[Main]: [tune_jit] Applied increased JIT compiler optimization parameters
+2026-07-02 13:43:42: WARNING[Main]: Mod armor_monoid at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/armor_monoid:
+2026-07-02 13:43:42: WARNING[Main]: 	description.txt is deprecated, please use mod[pack].conf instead.
+2026-07-02 13:43:42: WARNING[Main]: 	depends.txt is deprecated, please use mod.conf instead.
+2026-07-02 13:43:42: WARNING[Main]: Mod music_api at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/music_modpack/music_api:
+2026-07-02 13:43:42: WARNING[Main]: 	description.txt is deprecated, please use mod[pack].conf instead.
+2026-07-02 13:43:42: WARNING[Main]: 	depends.txt is deprecated, please use mod.conf instead.
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'tundra_highland_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'tundra_highland_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'tundra_highland_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'tundra_highland_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'taiga_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'taiga_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'taiga_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'taiga_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'snowy_grassland'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'rainforest_swamp'
+[MOD] Built-in Item loaded
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "pumpkin" accessed at ...i.luanti/.minetest/games/asuna/mods/farming/farming.conf:19
+2026-07-02 13:43:42: WARNING[Main]: Assignment to undeclared global "biomes" inside a function at ...uanti.luanti/.minetest/games/asuna/mods/farming/init.lua:28
+[MOD] Farming Redo loaded
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:mushroom_amanita_green @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:mushroom_cantharellus @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:mushroom_gyromitra @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:mushroom_macrolepiota @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:mushroom_galerina @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:mushroom_boletus @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:campanula_blue @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:trifolium_red @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:trifolium_white @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:centaurea @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:anagallis_yellow @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:iris @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:leucanthemum_white @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:leontopodium_white @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:papaver_red @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:plantago @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:antirrhinum @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:drosera @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:digitalis_blue @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:digitalis_yellow @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: herbs registers herbs:achillea_white @signs_bot.
+2026-07-02 13:43:42: ACTION[Main]: [Mod] herbs V 1.2 loaded.
+[Mod] herbs V 1.2 loaded.
+[MOD] Baked Clay loaded
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'quicksand_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:bushland_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:bushland_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'dorwinion_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'dorwinion_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:alderswamp_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:alderswamp_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassland_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'japaneseforest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'japaneseforest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'prairie_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'prairie_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'nightshade_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'nightshade_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'sandstone_desert_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassytwo_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'savanna_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'savanna_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mesa_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mesa_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'jumble_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'jumble_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'deciduous_forest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'marsh_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'marsh_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mushroom_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mushroom_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'desert_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'desert_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'bamboo_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'plains_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'fiery_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:outback_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:outback_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassland_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:mediterranean_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'sandstone_desert_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassytwo_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:bamboo_forest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:bamboo_forest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'bamboo_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:heath_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:heath_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'fiery_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'swamp_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'swamp_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:mediterranean_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'plains_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'deciduous_forest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'rainforest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'rainforest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:mineral_waters_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:mineral_waters_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'livingjungle:jungle_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'livingjungle:jungle_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grove_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grove_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'quicksand_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:bushland_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:bushland_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'dorwinion_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'dorwinion_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:alderswamp_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:alderswamp_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassland_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'japaneseforest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'japaneseforest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'prairie_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'prairie_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'nightshade_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'nightshade_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'sandstone_desert_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassytwo_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'savanna_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'savanna_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mesa_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mesa_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'jumble_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'jumble_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'deciduous_forest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'marsh_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'marsh_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mushroom_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mushroom_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'desert_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'desert_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'bamboo_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'plains_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'fiery_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:outback_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:outback_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassland_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:mediterranean_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'sandstone_desert_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grassytwo_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:bamboo_forest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:bamboo_forest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'bamboo_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:heath_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:heath_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'fiery_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'swamp_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'swamp_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'naturalbiomes:mediterranean_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'plains_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'deciduous_forest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'rainforest_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'rainforest_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:mineral_waters_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'everness:mineral_waters_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'livingjungle:jungle_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'livingjungle:jungle_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grove_shore_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'grove_below_shore'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'frost_floatland'
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "node" accessed at ...ti.luanti/.minetest/games/asuna/mods/ethereal/schems.lua:348
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'mesa_redwood'
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'frost_floatland'
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "node" accessed at ...nti.luanti/.minetest/games/asuna/mods/ethereal/decor.lua:221
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "seed" accessed at ...nti.luanti/.minetest/games/asuna/mods/ethereal/decor.lua:436
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+[MOD] Ethereal loaded
+2026-07-02 13:43:42: WARNING[Main]: Mod caverealms at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms:
+2026-07-02 13:43:42: WARNING[Main]: 	description.txt is deprecated, please use mod[pack].conf instead.
+2026-07-02 13:43:42: WARNING[Main]: 	depends.txt is deprecated, please use mod.conf instead.
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:6)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_emerald: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:20)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_mese: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:34)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_ruby: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:48)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_amethyst: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:62)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:thin_ice: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:120)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:salt_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:134)
+2026-07-02 13:43:42: WARNING[Main]: Field "use_texture_alpha" on node caverealms:stone_with_salt: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/caverealms/nodes.lua:290)
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "seed" accessed at ....luanti/.minetest/games/asuna/mods/caverealms/biomes.lua:250
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "seed" accessed at ....luanti/.minetest/games/asuna/mods/caverealms/biomes.lua:464
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'alderswamp'
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...anti/.minetest/games/asuna/mods/naturalbiomes/alpine.lua:482
+2026-07-02 13:43:42: WARNING[Main]: get_biome_list: failed to get biome 'alpine'
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...nti/.minetest/games/asuna/mods/naturalbiomes/outback.lua:411
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...inetest/games/asuna/mods/naturalbiomes/mediterranean.lua:509
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:606
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:625
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:737
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:757
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:868
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:888
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "after_place_leaves" accessed at ...ti/.minetest/games/asuna/mods/naturalbiomes/bushland.lua:970
+2026-07-02 13:43:42: WARNING[Main]: Mod lootchests at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/lootchests_modpack/lootchests:
+2026-07-02 13:43:42: WARNING[Main]: 	description.txt is deprecated, please use mod[pack].conf instead.
+2026-07-02 13:43:42: WARNING[Main]: 	depends.txt is deprecated, please use mod.conf instead.
+2026-07-02 13:43:42: WARNING[Main]: Undeclared global variable "mod_bonemeal" accessed at ...anti/.minetest/games/asuna/mods/biomes/prairie/nodes.lua:116
+2026-07-02 13:43:42: WARNING[Main]: 3d_armor_ui: Mod loaded but unused.
+2026-07-02 13:43:42: WARNING[Main]: 3d_armor_ip: Mod loaded but unused.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_err had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_err_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_err had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_err_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: Node telemosaic:beacon_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+[Mod] x_farming loaded.. [0.110942s]
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness_coral_forest'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness_crystal_forest'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_swamp'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_swamp'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_swamp'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_swamp'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_swamp'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_swamp'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness:cursed_lands_under'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness_cursed_lands'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness_cursed_lands'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness_cursed_lands'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'everness_cursed_lands'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:stair_bamboo_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:stair_inner_bamboo_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:stair_outer_bamboo_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:slab_bamboo_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:stair_willow_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:stair_inner_willow_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:stair_outer_willow_wood
+2026-07-02 13:43:43: WARNING[Main]: Overwriting stairs node: stairs:slab_willow_wood
+[Mod] everness loaded.. [0.184019s]
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:algae_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ice_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:poison_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:dark_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:savanna_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ocean_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:grass_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:mineral_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+2026-07-02 13:43:43: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:lava_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/livingslimes/functions.lua:36)
+[MOD] Bonemeal loaded
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'default:cold_desert'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'default:cold_desert_ocean'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'junglee_shore'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'junglee_shore'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'junglee_shore'
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome 'junglee_shore'
+2026-07-02 13:43:43: ACTION[Main]: [MOD] Animalia [0.6] loaded
+2026-07-02 13:43:43: WARNING[Main]: Undeclared global variable "grow_new_japanese_tree_2" accessed at ...test/games/asuna/mods/biomes/japaneseforest/bonemeal.lua:3
+2026-07-02 13:43:43: WARNING[Main]: Node 'light_source' value exceeds maximum, limiting it: nightshade:nightshade_glowin_leaves_1
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:43: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:44: WARNING[Main]: Overwriting stairs node: stairs:stair_quartz_block
+2026-07-02 13:43:44: WARNING[Main]: Overwriting stairs node: stairs:stair_inner_quartz_block
+2026-07-02 13:43:44: WARNING[Main]: Overwriting stairs node: stairs:stair_outer_quartz_block
+2026-07-02 13:43:44: WARNING[Main]: Overwriting stairs node: stairs:slab_quartz_block
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Forge
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Storeroom
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Garden
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Chandelier
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Jail
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Bare Floor
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Bare Ceiling
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Library
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Wall Torches
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Alchemy Lab
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Bare Walls
+2026-07-02 13:43:44: ACTION[Main]: [dungeonsplus] registered feature Liquid Pool
+2026-07-02 13:43:44: WARNING[Main]: [beds] player_monoids is too old, thus not supported.
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node cloudcraft:cloud: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/nodes.lua:106)
+2026-07-02 13:43:44: WARNING[Main]: Mod lootchests_default at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/lootchests_modpack/lootchests_default:
+2026-07-02 13:43:44: WARNING[Main]: 	description.txt is deprecated, please use mod[pack].conf instead.
+2026-07-02 13:43:44: WARNING[Main]: 	depends.txt is deprecated, please use mod.conf instead.
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_emerald: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_mese: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_ruby: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_amethyst: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:salt_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Node telemosaic:beacon had greater light_source than 14, it was reduced.
+2026-07-02 13:43:44: WARNING[Main]: Node telemosaic:beacon_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:44: WARNING[Main]: Node telemosaic:beacon_err_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node cloudcraft:cloud: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ocean_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:grass_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:mineral_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:lava_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:dark_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:savanna_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:poison_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Node telemosaic:beacon_err had greater light_source than 14, it was reduced.
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node caverealms:stone_with_salt: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:algae_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ice_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/tt/init.lua:44)
+2026-07-02 13:43:44: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:44: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:44: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome 'rainforest_swamp'
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome 'icesheet'
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome 'snowy_grassland'
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome 'icesheet_ocean'
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: get_biome_list: failed to get biome ''
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:thin_ice: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_emerald: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_mese: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_ruby: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_amethyst: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:salt_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Node telemosaic:beacon had greater light_source than 14, it was reduced.
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:grass_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:mineral_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:lava_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:dark_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:savanna_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:stone_with_salt: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Node telemosaic:beacon_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:45: WARNING[Main]: Node telemosaic:beacon_err_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ocean_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:algae_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ice_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:poison_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/everness/tools.lua:278)
+2026-07-02 13:43:45: WARNING[Main]: Node telemosaic:beacon_err had greater light_source than 14, it was reduced.
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:thin_ice: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_emerald: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_mese: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_ruby: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_amethyst: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:salt_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Node telemosaic:beacon had greater light_source than 14, it was reduced.
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:grass_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:mineral_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:lava_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:dark_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:savanna_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:stone_with_salt: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Node telemosaic:beacon_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:47: WARNING[Main]: Node telemosaic:beacon_err_protected had greater light_source than 14, it was reduced.
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ocean_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node caverealms:glow_crystal: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:algae_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:ice_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Field "use_texture_alpha" on node livingslimes:poison_slime_block: Boolean values are deprecated; use the new choices instead. (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/cloudcraft/src/tools.lua:192)
+2026-07-02 13:43:47: WARNING[Main]: Node telemosaic:beacon_err had greater light_source than 14, it was reduced.
+2026-07-02 13:43:48: WARNING[Main]: Server: ignoring file as it has disallowed characters: "_Read Me.txt"
+2026-07-02 13:43:48: WARNING[Main]: Server: ignoring file as it has disallowed characters: "marinara_sea worm.png"
+2026-07-02 13:43:48: WARNING[Main]: Server: ignoring file as it has disallowed characters: "marinara_sea worm3.png"
+2026-07-02 13:43:48: WARNING[Main]: Server: ignoring file as it has disallowed characters: "marinara_sea worm2.png"
+ _                   _   _ 
+| |_   _  __ _ _ __ | |_(_)
+| | | | |/ _` | '_ \| __| |
+| | |_| | (_| | | | | |_| |
+|_|\__,_|\__,_|_| |_|\__|_|  ___ 5.16.1
+2026-07-02 13:43:49: ACTION[Main]: World at [/home/ahsoka/.var/app/org.luanti.luanti/.minetest/worlds/zz]
+2026-07-02 13:43:49: ACTION[Main]: Server for gameid="asuna" listening on [::]:30000.
+2026-07-02 14:14:13: ACTION[Server]: Server: Player with the name "adamcsaka" tried to connect from ::ffff:192.168.1.1 but was disallowed for the following reason: 
+2026-07-02 14:14:13: ACTION[Server]: Cannot create new player called 'adamcsaka'. Another account called 'Adamcsaka' is already registered. Please check the spelling if it's your account or use a different nickname.
+2026-07-02 14:14:38: ACTION[Server]: Adamcsaka [::ffff:192.168.1.1] joins game. List of players: Adamcsaka
+2026-07-02 14:14:38: WARNING[Server]: Reading initial object properties directly from an entity definition is deprecated, move it to the 'initial_properties' table instead. (Property 'physical' in entity 'animalia:bat')
+2026-07-02 14:14:39: WARNING[Server]: Reading initial object properties directly from an entity definition is deprecated, move it to the 'initial_properties' table instead. (Property 'physical' in entity 'animalia:song_bird')
+2026-07-02 14:14:39: WARNING[Server]: Reading initial object properties directly from an entity definition is deprecated, move it to the 'initial_properties' table instead. (Property 'physical' in entity 'livingslimes:poison_slime')
+2026-07-02 14:14:39: WARNING[Server]: Reading initial object properties directly from an entity definition is deprecated, move it to the 'initial_properties' table instead. (Property 'physical' in entity 'livingslimes:ocean_slime')
+2026-07-02 14:14:41: WARNING[Server]: Reading initial object properties directly from an entity definition is deprecated, move it to the 'initial_properties' table instead. (Property 'physical' in entity 'animalia:opossum')
+2026-07-02 14:14:41: WARNING[Server]: Deprecated call to get_bone_position, use get_bone_override instead (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/animalia/api/api.lua:121)
+2026-07-02 14:14:41: WARNING[Server]: Deprecated call to set_bone_position, use set_bone_override instead (at /home/ahsoka/.var/app/org.luanti.luanti/.minetest/games/asuna/mods/animalia/api/api.lua:138)
+2026-07-02 14:14:44: ACTION[Server]: [Creatura] [ABM Spawning] Spawned 9 animalia:song_bird at (267,14,-372)
+2026-07-02 14:14:44: ACTION[Server]: [Creatura] [ABM Spawning] Spawned 10 animalia:song_bird at (326,21,-344)
+2026-07-02 14:14:49: ACTION[Server]: [x_farming] Added Bee at (316,8,-306)
+2026-07-02 14:15:02: ACTION[Server]: [x_farming] Added Bee at (409,7,-297)
+2026-07-02 14:15:05: ACTION[Server]: [Music_api]: Starting playblack for: Adamcsaka endtitles Available tracks for user: 13 Random delay: 30
+2026-07-02 14:15:22: ACTION[Server]: Adamcsaka leaves game. List of players: 
+INFO: signal_handler(): got SIGTERM, shutting down.
+2026-07-02 14:17:48: ACTION[Main]: Server: Shutting down

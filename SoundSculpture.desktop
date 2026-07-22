@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=SoundSculpture
+GenericName=Audio Generator / Soundscape
+Comment=AudioForge zeroHour – dedikált ablakban, hangbarát beállításokkal
+Exec=/home/ahsoka/Dokumentumok/Antigravity/afsc/Glm/launch-soundsculpture.sh
+Icon=multimedia-audio-player
+Terminal=false
+Categories=AudioVideo;Audio;Music;
+StartupNotify=true
+StartupWMClass=SoundSculpture
+Keywords=audio;synth;soundscape;generator;daw;
