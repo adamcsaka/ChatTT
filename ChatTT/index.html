@@ -195,28 +195,100 @@
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: minmax(320px, 350px) 1fr;
-            gap: 20px;
+            display: flex;
+            position: relative;
+            width: 100%;
+            align-items: stretch;
         }
 
-        @media (max-width: 850px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .right-panel {
-            width: 320px;
+        .sidebar {
+            width: 350px;
+            min-width: 220px;
+            max-width: 600px;
+            flex-shrink: 0;
             background: var(--card-bg);
             color: var(--text-color);
-            padding: 1.2rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-resizer {
+            width: 14px;
+            cursor: col-resize;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            margin: 0 2px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-resizer::after {
+            content: '';
+            width: 4px;
+            height: 40px;
+            background: var(--input-border);
+            border-radius: 2px;
+            transition: background 0.2s, width 0.2s;
+        }
+
+        .sidebar-resizer:hover::after,
+        .sidebar-resizer.is-dragging::after {
+            background: var(--primary-color);
+            width: 6px;
+        }
+
+        .chat-area {
+            flex: 1;
+            min-width: 300px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             height: 600px;
-            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 850px) {
+            .main-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .sidebar {
+                width: 100% !important;
+                min-width: 100% !important;
+                max-width: 100% !important;
+            }
+            .sidebar-resizer {
+                display: none;
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 15px var(--primary-color); }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+
+        .active-stream-badge {
+            animation: pulseGlow 1.6s infinite ease-in-out;
+            background: #ef4444;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .right-panel-header {
@@ -908,7 +980,7 @@
         </header>
 
         <div class="main-content">
-            <div class="sidebar">
+            <div class="sidebar" id="sidebar">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3 style="margin-bottom: 0;">💬 Topikok</h3>
                     <button class="btn btn-primary" onclick="resyncTopics()" style="font-size: 12px; padding: 4px 8px;" title="Törölt topikok visszahozása szinkronizálással">🔄 Szinkron</button>
@@ -941,12 +1013,18 @@
                 </div>
             </div>
 
-            <div class="chat-area">
+            <!-- Resizable Sidebar Divider -->
+            <div class="sidebar-resizer" id="sidebar-resizer" title="Húzd az egérrel a bal sáv és a chat átméretezéséhez"></div>
+
+            <div class="chat-area" id="chat-area">
                 <div class="chat-header">
                     <h3 id="current-topic-name">Válassz egy topikot</h3>
-                    <div style="display: flex; gap: 8px;">
-                        <button id="export-txt-btn" class="btn btn-primary" onclick="exportTopicToTxt()" style="display: none; font-size: 13px;">📥 Mentés TXT-ként</button>
-                        <button id="right-panel-toggle-btn" class="btn" onclick="openPinsMediaModal()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="📌 Rögzített üzenetek & Média felugró ablak megnyitása">📌 Rögzítettek & Média</button>
+                    <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                        <button id="active-stream-badge" class="active-stream-badge" onclick="openActiveStreamPlayer()" style="display: none;" title="Élő adás / hanghívás megnyitása az ablakban">📺 1 Élő Stream</button>
+                        <button id="start-voice-btn" class="btn" onclick="startVoiceCall()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="P2P Hanghívás indítása mikrofonnal">🎙️ Hanghívás</button>
+                        <button id="start-stream-btn" class="btn" onclick="startScreenOrCamStream()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="Képernyő vagy kamera élő közvetítése (Stream)">🎥 Stream</button>
+                        <button id="right-panel-toggle-btn" class="btn" onclick="openPinsMediaModal()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="📌 Rögzített üzenetek & Média felugró ablak megnyitása">📌 Pinek & Média</button>
+                        <button id="export-txt-btn" class="btn btn-primary" onclick="exportTopicToTxt()" style="display: none; font-size: 13px;" title="Beszélgetés mentése TXT fájlként">📥 Mentés TXT-ként</button>
                     </div>
                 </div>
                 <div class="messages" id="messages"></div>
@@ -998,6 +1076,56 @@
         </div>
     </div>
 
+    <!-- WebRTC Stream & Voice Call Instant Player Popup Modal -->
+    <div id="stream-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 2500;">
+        <div class="modal-content" style="max-width: 780px; width: 92%; max-height: 90vh; background: var(--card-bg); color: var(--text-color); border-radius: 14px; padding: 1.2rem; box-shadow: 0 12px 35px rgba(0,0,0,0.5); display: flex; flex-direction: column; position: relative;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; border-bottom: 1px solid var(--input-border); padding-bottom: 8px;">
+                <h3 id="stream-modal-title" style="margin: 0; color: var(--primary-color); display: flex; align-items: center; gap: 8px; font-size: 16px;">
+                    🎙️ Hanghívás / 🎥 Élő Stream
+                </h3>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span id="stream-live-tag" style="font-size: 12px; padding: 3px 8px; border-radius: 10px; background: #10b981; color: white; font-weight: bold;">🔴 ÉLŐ</span>
+                    <button onclick="closeStreamModal()" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: inherit;" title="Ablak bezárása (hívás folytatódik a háttérben)">✖</button>
+                </div>
+            </div>
+
+            <div id="stream-player-container" style="position: relative; width: 100%; height: 400px; background: #0f172a; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                
+                <video id="stream-video-player" autoplay playsinline style="width: 100%; height: 100%; object-fit: contain; display: none;"></video>
+                <audio id="stream-audio-player" autoplay></audio>
+                
+                <!-- Voice Call Avatar Box (shown when audio call) -->
+                <div id="voice-call-avatar-box" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; gap: 12px;">
+                    <div style="font-size: 64px; animation: pulseGlow 1.8s infinite ease-in-out;">🎙️</div>
+                    <div id="voice-caller-name" style="font-size: 18px; font-weight: bold;">P2P Hanghívás</div>
+                    <div style="font-size: 13px; opacity: 0.7;">Közvetlen P2P WebRTC Hangkapcsolat</div>
+                </div>
+
+                <!-- Autoplay Restriction Unlock Overlay -->
+                <div id="stream-autoplay-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); flex-direction: column; justify-content: center; align-items: center; color: white; gap: 14px; z-index: 10; text-align: center; padding: 20px;">
+                    <div style="font-size: 44px;">🔊</div>
+                    <div style="font-size: 16px; font-weight: bold;">Böngésző Média Lejátszás Engedélyezése</div>
+                    <div style="font-size: 13px; max-width: 80%; opacity: 0.85; line-height: 1.4;">A böngésződ biztonsági szabályzata miatt egy kattintás szükséges a vett hang/videó stream elindításához.</div>
+                    <button class="btn btn-primary" onclick="unlockAutoplayStream()" style="padding: 10px 22px; font-size: 15px; font-weight: bold; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4);">▶️ Kattints ide a Lejátszáshoz</button>
+                </div>
+            </div>
+
+            <!-- Stream Controls Toolbar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 10px; border-top: 1px solid var(--input-border); flex-wrap: wrap; gap: 8px;">
+                <div style="display: flex; gap: 6px;">
+                    <button id="btn-toggle-mic" class="btn" onclick="toggleLocalMic()" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="Saját mikrofon némitása / visszahangosítása">🎙️ Mikrofon</button>
+                    <button id="btn-toggle-cam" class="btn" onclick="toggleLocalScreenCam()" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="Képernyő / Kamera stream elindítása / leállítása">🎥 Képernyő</button>
+                    <button id="btn-toggle-audio-out" class="btn" onclick="toggleRemoteAudio()" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="Vett hang elnémítása / engedélyezése">🔊 Hang</button>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn" onclick="toggleStreamFullscreen()" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="Képernyő teljes méretre helyezése">⛶ Teljes képernyő</button>
+                    <button class="btn btn-danger" onclick="stopActiveCallOrStream()" style="font-weight: bold;">🔴 Befejezés / Kilépés</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // State
         let username = '';
@@ -1021,6 +1149,14 @@
         let rightPanelOpen = localStorage.getItem('p2p_right_panel_open') !== 'false';
         let activeRightTab = 'pins';
 
+        // WebRTC Voice Call & Live Stream State
+        let localMediaStream = null;
+        let activePeerCalls = [];
+        let activeRemoteStream = null;
+        let isMicMuted = false;
+        let isRemoteAudioMuted = false;
+        let activeStreamsMap = {}; // { [peerId]: { username, streamType, timestamp } }
+
         // Initialize
         function init() {
             loadTheme();
@@ -1031,6 +1167,7 @@
             loadHostedFiles();
             updateSoundButton();
             loadSoundType();
+            initSidebarResizer();
             
             const savedUsername = localStorage.getItem('p2p_username');
             const savedPeerId = localStorage.getItem('p2p_peer_id') || '1';
@@ -1677,6 +1814,10 @@
                 handleConnection(conn);
             });
 
+            peer.on('call', (mediaCall) => {
+                handleIncomingMediaCall(mediaCall);
+            });
+
             peer.on('error', (err) => {
                 console.error('Peer error:', err);
                 if (err.type === 'unavailable-id') {
@@ -1793,6 +1934,21 @@
                         showNotification(`🫨 @${received.username} megrezgette a(z) "${tName}" topikot!`);
                         playNudgeBuzzSound();
                     }
+                    break;
+                case 'stream_signal':
+                    if (received.action === 'start_call') {
+                        activeStreamsMap[received.peerId] = {
+                            username: received.username,
+                            streamType: received.streamType,
+                            timestamp: Date.now()
+                        };
+                        playMSNSound();
+                        showNotification(`📺 @${received.username} élő ${received.streamType === 'voice' ? 'hanghívást' : 'streamet'} indított!`);
+                    } else if (received.action === 'stop_call') {
+                        delete activeStreamsMap[received.peerId];
+                        showNotification(`🔴 @${received.username} leállította az élő közvetítést.`);
+                    }
+                    updateActiveStreamBadge();
                     break;
                 case 'presence':
                     // Update known users with peer's info
@@ -2633,6 +2789,354 @@
             setTimeout(() => {
                 notification.remove();
             }, 3000);
+        }
+
+        // Resizable Sidebar Divider (Drag-to-resize topics list and chat area)
+        function initSidebarResizer() {
+            const resizer = document.getElementById('sidebar-resizer');
+            const sidebar = document.getElementById('sidebar');
+            if (!resizer || !sidebar) return;
+
+            const savedWidth = localStorage.getItem('p2p_sidebar_width');
+            if (savedWidth && window.innerWidth > 850) {
+                const parsed = parseInt(savedWidth, 10);
+                if (parsed >= 200 && parsed <= 650) {
+                    sidebar.style.width = parsed + 'px';
+                }
+            }
+
+            let isDragging = false;
+            let startX = 0;
+            let startWidth = 0;
+
+            const startResize = (clientX) => {
+                isDragging = true;
+                startX = clientX;
+                startWidth = sidebar.getBoundingClientRect().width;
+                resizer.classList.add('is-dragging');
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+            };
+
+            const doResize = (clientX) => {
+                if (!isDragging) return;
+                const dx = clientX - startX;
+                let newWidth = startWidth + dx;
+                if (newWidth < 220) newWidth = 220;
+                if (newWidth > 650) newWidth = 650;
+                sidebar.style.width = newWidth + 'px';
+            };
+
+            const stopResize = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                resizer.classList.remove('is-dragging');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+                const finalWidth = sidebar.getBoundingClientRect().width;
+                localStorage.setItem('p2p_sidebar_width', Math.round(finalWidth));
+            };
+
+            resizer.addEventListener('mousedown', (e) => {
+                startResize(e.clientX);
+                const onMouseMove = (ev) => doResize(ev.clientX);
+                const onMouseUp = () => {
+                    stopResize();
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
+            resizer.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    startResize(e.touches[0].clientX);
+                }
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    doResize(e.touches[0].clientX);
+                }
+            });
+
+            document.addEventListener('touchend', () => {
+                if (isDragging) stopResize();
+            });
+        }
+
+        // WebRTC Voice Call & Live Screen / Cam Streaming Functions
+        function handleIncomingMediaCall(mediaCall) {
+            const answerStream = localMediaStream || new MediaStream();
+            mediaCall.answer(answerStream);
+
+            setupMediaCallHandlers(mediaCall);
+            
+            playMSNSound();
+            const callerName = (mediaCall.metadata && mediaCall.metadata.username) ? mediaCall.metadata.username : mediaCall.peer;
+            const sType = (mediaCall.metadata && mediaCall.metadata.streamType) ? mediaCall.metadata.streamType : 'stream';
+            
+            showNotification(`📞 Bejövő ${sType === 'voice' ? 'hanghívás' : 'élő stream'}: @${callerName}`);
+        }
+
+        function setupMediaCallHandlers(mediaCall) {
+            activePeerCalls.push(mediaCall);
+
+            mediaCall.on('stream', (remoteStream) => {
+                activeRemoteStream = remoteStream;
+                const callerName = (mediaCall.metadata && mediaCall.metadata.username) ? mediaCall.metadata.username : mediaCall.peer;
+                openStreamModal(`🎥 Élő Adás / Hanghívás: @${callerName}`, false, remoteStream);
+            });
+
+            mediaCall.on('close', () => {
+                activePeerCalls = activePeerCalls.filter(c => c !== mediaCall);
+                if (activePeerCalls.length === 0 && !localMediaStream) {
+                    closeStreamModal();
+                }
+            });
+
+            mediaCall.on('error', (err) => {
+                console.error('Media call error:', err);
+            });
+        }
+
+        async function startVoiceCall() {
+            if (!peer || !peer.id) {
+                showNotification('Még nem kapcsolódtál a P2P hálózathoz!', 'error');
+                return;
+            }
+            try {
+                localMediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                isMicMuted = false;
+                openStreamModal('🎙️ Saját Hanghívás (Mikrofon)', true, localMediaStream);
+
+                connections.forEach(conn => {
+                    if (conn.open && conn.peer) {
+                        const call = peer.call(conn.peer, localMediaStream, { metadata: { username: username, streamType: 'voice' } });
+                        setupMediaCallHandlers(call);
+                    }
+                });
+
+                broadcastStreamSignal('start_call', 'voice');
+                showNotification('🎙️ P2P Hanghívás elindítva!');
+            } catch (err) {
+                console.error('Mic access error:', err);
+                showNotification('Nem sikerült hozzáférni a mikrofonhoz: ' + err.message, 'error');
+            }
+        }
+
+        async function startScreenOrCamStream() {
+            if (!peer || !peer.id) {
+                showNotification('Még nem kapcsolódtál a P2P hálózathoz!', 'error');
+                return;
+            }
+            try {
+                let videoStream;
+                if (navigator.mediaDevices.getDisplayMedia) {
+                    videoStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                } else {
+                    videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                }
+
+                let micStream;
+                try {
+                    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                } catch(e) {}
+
+                const tracks = [...videoStream.getVideoTracks()];
+                if (videoStream.getAudioTracks().length > 0) {
+                    tracks.push(...videoStream.getAudioTracks());
+                } else if (micStream && micStream.getAudioTracks().length > 0) {
+                    tracks.push(...micStream.getAudioTracks());
+                }
+
+                localMediaStream = new MediaStream(tracks);
+
+                videoStream.getVideoTracks()[0].onended = () => {
+                    stopActiveCallOrStream();
+                };
+
+                openStreamModal('🎥 Saját Képernyő / Kamera Stream', true, localMediaStream);
+
+                connections.forEach(conn => {
+                    if (conn.open && conn.peer) {
+                        const call = peer.call(conn.peer, localMediaStream, { metadata: { username: username, streamType: 'video' } });
+                        setupMediaCallHandlers(call);
+                    }
+                });
+
+                broadcastStreamSignal('start_call', 'video');
+                showNotification('🎥 Streamelés elindítva!');
+            } catch (err) {
+                console.error('Stream error:', err);
+                showNotification('Streamelés nem indítható el: ' + err.message, 'error');
+            }
+        }
+
+        function openStreamModal(title, isLocal = false, stream = null) {
+            const modal = document.getElementById('stream-modal');
+            const modalTitle = document.getElementById('stream-modal-title');
+            const avatarBox = document.getElementById('voice-call-avatar-box');
+            const callerNameEl = document.getElementById('voice-caller-name');
+            const videoEl = document.getElementById('stream-video-player');
+            const audioEl = document.getElementById('stream-audio-player');
+            const overlay = document.getElementById('stream-autoplay-overlay');
+
+            if (modalTitle) modalTitle.innerHTML = title;
+            if (modal) modal.style.display = 'flex';
+            if (overlay) overlay.style.display = 'none';
+
+            const streamToUse = stream || activeRemoteStream || localMediaStream;
+
+            if (streamToUse) {
+                const hasVideo = streamToUse.getVideoTracks().length > 0 && streamToUse.getVideoTracks().some(t => t.enabled);
+                if (hasVideo) {
+                    videoEl.style.display = 'block';
+                    avatarBox.style.display = 'none';
+                    videoEl.srcObject = streamToUse;
+                    const p = videoEl.play();
+                    if (p !== undefined) {
+                        p.catch(err => {
+                            console.warn('Autoplay restricted by browser:', err);
+                            if (overlay) overlay.style.display = 'flex';
+                        });
+                    }
+                } else {
+                    videoEl.style.display = 'none';
+                    avatarBox.style.display = 'flex';
+                    if (callerNameEl) callerNameEl.textContent = title;
+                    audioEl.srcObject = streamToUse;
+                    const p = audioEl.play();
+                    if (p !== undefined) {
+                        p.catch(err => {
+                            console.warn('Audio autoplay restricted by browser:', err);
+                            if (overlay) overlay.style.display = 'flex';
+                        });
+                    }
+                }
+            }
+        }
+
+        function unlockAutoplayStream() {
+            const videoEl = document.getElementById('stream-video-player');
+            const audioEl = document.getElementById('stream-audio-player');
+            const overlay = document.getElementById('stream-autoplay-overlay');
+            if (overlay) overlay.style.display = 'none';
+
+            if (videoEl && videoEl.srcObject) {
+                videoEl.play().catch(e => console.warn(e));
+            }
+            if (audioEl && audioEl.srcObject) {
+                audioEl.play().catch(e => console.warn(e));
+            }
+        }
+
+        function closeStreamModal() {
+            const modal = document.getElementById('stream-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function openActiveStreamPlayer() {
+            if (localMediaStream) {
+                openStreamModal('🎥 Saját Aktív Stream / Hanghívás', true, localMediaStream);
+            } else if (activeRemoteStream) {
+                openStreamModal('🎥 Vett Élő Stream / Hanghívás', false, activeRemoteStream);
+            } else {
+                showNotification('Nincs aktív élő stream a hálózaton.', 'error');
+            }
+        }
+
+        function toggleLocalMic() {
+            if (!localMediaStream) return;
+            const audioTrack = localMediaStream.getAudioTracks()[0];
+            if (audioTrack) {
+                audioTrack.enabled = !audioTrack.enabled;
+                isMicMuted = !audioTrack.enabled;
+                const btn = document.getElementById('btn-toggle-mic');
+                if (btn) {
+                    btn.textContent = isMicMuted ? '🔇 Mikrofon Néma' : '🎙️ Mikrofon';
+                    btn.style.background = isMicMuted ? '#ef4444' : 'var(--input-bg)';
+                    btn.style.color = isMicMuted ? 'white' : 'var(--text-color)';
+                }
+                showNotification(isMicMuted ? '🔇 Mikrofon elnémítva' : '🎙️ Mikrofon visszahangosítva');
+            }
+        }
+
+        function toggleLocalScreenCam() {
+            if (localMediaStream) {
+                stopActiveCallOrStream();
+            } else {
+                startScreenOrCamStream();
+            }
+        }
+
+        function toggleRemoteAudio() {
+            const audioEl = document.getElementById('stream-audio-player');
+            const videoEl = document.getElementById('stream-video-player');
+            isRemoteAudioMuted = !isRemoteAudioMuted;
+            if (audioEl) audioEl.muted = isRemoteAudioMuted;
+            if (videoEl) videoEl.muted = isRemoteAudioMuted;
+
+            const btn = document.getElementById('btn-toggle-audio-out');
+            if (btn) {
+                btn.textContent = isRemoteAudioMuted ? '🔇 Hang Néma' : '🔊 Hang';
+            }
+            showNotification(isRemoteAudioMuted ? '🔇 Vett hang elnémítva' : '🔊 Vett hang engedélyezve');
+        }
+
+        function toggleStreamFullscreen() {
+            const container = document.getElementById('stream-player-container');
+            if (!container) return;
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(e => console.warn(e));
+            } else {
+                document.exitFullscreen().catch(e => console.warn(e));
+            }
+        }
+
+        function stopActiveCallOrStream() {
+            if (localMediaStream) {
+                localMediaStream.getTracks().forEach(t => t.stop());
+                localMediaStream = null;
+            }
+            activePeerCalls.forEach(call => {
+                try { call.close(); } catch(e) {}
+            });
+            activePeerCalls = [];
+            activeRemoteStream = null;
+
+            broadcastStreamSignal('stop_call');
+
+            closeStreamModal();
+            updateActiveStreamBadge();
+            showNotification('🔴 Hanghívás / Stream leállítva.');
+        }
+
+        function broadcastStreamSignal(action, streamType = 'video') {
+            broadcast({
+                type: 'stream_signal',
+                action: action,
+                streamType: streamType,
+                username: username,
+                peerId: peer ? peer.id : ''
+            });
+            updateActiveStreamBadge();
+        }
+
+        function updateActiveStreamBadge() {
+            const badge = document.getElementById('active-stream-badge');
+            const hasActive = localMediaStream || activeRemoteStream || Object.keys(activeStreamsMap).length > 0;
+
+            if (badge) {
+                if (hasActive) {
+                    badge.style.display = 'flex';
+                    const count = (localMediaStream ? 1 : 0) + Object.keys(activeStreamsMap).length;
+                    badge.textContent = `📺 ${count} Élő Stream`;
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
         }
 
         // Start
