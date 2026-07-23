@@ -4,27 +4,31 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
 
 ---
 
-## ⚡ Főbb Funkciók (v2.9)
+## ⚡ Főbb Funkciók (v3.0)
 
+* 👥 **Tartós Ismerős Törlés & Böngészőfrissítés Védelem**:
+  * Törölt peerek/ismerősök megőrzése (`deletedUserIds` lista).
+  * Böngészőfrissítés után a törölt ismerősök **NEM térnek vissza automatikusan**, a megjegyzett beállítások fogadnak.
+* 🔄 **Interaktív Szinkronizálási Menü (Sync Options Modal)**:
+  * A `🔄 Szinkronizálás` gombra kattintva felugró menüből választhatsz:
+    1. 💬 **Csak Topikok szinkronizálása**
+    2. 👥 **Csak Ismerősök & Peerek szinkronizálása**
+    3. 🔄 **Mindent szinkronizál (Topikok + Ismerősök)**
+  * Pipálható opció a törölt ismerősök szándékos visszaállítására.
+* 📌 **Megjegyzett Állapotok & Aktuális Topik**:
+  * Az éppen megnyitott topik, sávszélességek, színek, üzenethangok és beállítások megőrződnek frissítés után is.
 * 🎙️ **P2P Hanghívások & 🎥 Élő Streamelések (WebRTC)**:
-  * Közvetlen mikrofon alapú **hanghívások** és képernyő/kamera **élő közvetítések** (Stream).
-  * **Instant Stream Player Popup**: Az élő adás vagy hívás azonnal megnyílik egy különálló, beágyazott videó/hang lejátszó ablakban.
-  * **Autoplay Kötöttségek Feloldása**: Böngészős tiltások automatikus kezelése egykattintásos engedélyező gombbal.
-  * **WebRTC Stream Szignálózás**: Értesítések az aktív közvetítésekről (`📺 Élő Adás` gomb és jelvények).
+  * Mikrofon alapú **hanghívások** és képernyő/kamera **élő közvetítések** (Stream).
+  * **Instant Stream Player Popup**: Az élő adás vagy hívás azonnal megnyílik egy beágyazott lejátszó ablakban.
+  * **Autoplay Kötöttségek Feloldása**: Böngészős tiltások automatikus kezelése engedélyező gombbal.
 * ↔️ **Átméretezhető Felület (Resizable Divider)**:
-  * A bal oldali topik/felhasználó sáv és a chat ablak közötti elválasztóvonal egérrel/érintéssel szabadon **húzható és átméretezhető**.
-  * Az elrendezés automatikusan megőrződik a böngészőben.
-* 💬 **P2P Beszélgetések & Topikok**: Valós idejű üzenetküldés közvetlenül a résztvevők böngészői között.
+  * A bal oldali topik/felhasználó sáv és a chat ablak közötti elválasztóvonal szabadon **húzható és átméretezhető**.
 * 📌 **Rögzített Üzenetek & Média Felugró Ablak (Modal Window)**:
   * Kényelmes felugró ablak a pineknek és médiafájloknak.
-  * 1-kattintásos ugrás az üzenetekhez közvetlenül az ablakból.
 * 📥 **TXT Beszélgetés Exportálás**:
-  * A topikok és beszélgetések azonnal elmenthetők és letölthetők `.txt` fájlként.
-* 📁 **Korlátlan Fájl- és Videómegosztás**: Közvetlen P2P adatátvitel a háttérben.
-* 🫨 **MSN Nudge / Rezgetés**: Megrezgetheted a topikban lévő többiek ablakát a klasszikus MSN Messenger stílusában!
-* 🎵 **Kiválasztható Üzenethangok**: MSN Chime, Rezgés, Retro Pop, Csengettyű.
-* 🎨 **Valós Idejű Színtéma Testreszabás**: RGB színválasztó és egyedi felületi elemek.
-* 😀 **MSN Emojik & Billentyűparancsok**: Automatizált MSN hangulatjelek.
+  * Beszélgetések azonnali mentése és letöltése `.txt` fájlként.
+* 🫨 **MSN Nudge / Rezgetés & Üzenethangok**:
+  * Megrezgethető ablakok és kiválasztható MSN csengőhangok.
 
 ---
 
@@ -32,4 +36,4 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
 
 1. Nyisd meg a `ChatTT/index.html` fájlt bármilyen modern böngészőben.
 2. Add meg a felhasználónevedet és a Peer ID-dat (pl. `1` vagy `2`).
-3. Csatlakozz az ismerőseidhez, indíts hanghívást vagy streamet, és használd a chatet!
+3. Csatlakozz az ismerőseidhez és használd a P2P funkciókat!

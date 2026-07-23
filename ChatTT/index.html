@@ -974,7 +974,7 @@
                 </div>
                 <span class="user-info" id="current-user"></span>
                 <span class="connection-status disconnected" id="connection-status">Kapcsolatlan</span>
-                <button class="btn btn-primary" onclick="resyncTopics()" title="Törölt topikok újraszinkronizálása a csatlakozott peerektől">🔄 Szinkronizálás</button>
+                <button class="btn btn-primary" onclick="openSyncModal()" title="Szinkronizálási beállítások választása (Topikok / Ismerősök / Mindkettő)">🔄 Szinkronizálás</button>
                 <button class="btn btn-danger" onclick="clearAllData()">🗑️ Adatok törlése</button>
             </div>
         </header>
@@ -983,7 +983,7 @@
             <div class="sidebar" id="sidebar">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3 style="margin-bottom: 0;">💬 Topikok</h3>
-                    <button class="btn btn-primary" onclick="resyncTopics()" style="font-size: 12px; padding: 4px 8px;" title="Törölt topikok visszahozása szinkronizálással">🔄 Szinkron</button>
+                    <button class="btn btn-primary" onclick="openSyncModal()" style="font-size: 12px; padding: 4px 8px;" title="Szinkronizálási menü megnyitása">🔄 Szinkron</button>
                 </div>
                 <div class="create-topic">
                     <input type="text" id="new-topic-input" placeholder="Új topik neve..." maxlength="50">
@@ -1076,6 +1076,55 @@
         </div>
     </div>
 
+    <!-- Sync Options Selection Modal Popup -->
+    <div id="sync-options-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2200;">
+        <div class="modal-content" style="max-width: 520px; width: 90%; text-align: left; background: var(--card-bg); color: var(--text-color); border-radius: 14px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.4); display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--input-border); padding-bottom: 10px;">
+                <h3 style="margin: 0; color: var(--primary-color); display: flex; align-items: center; gap: 8px;">
+                    🔄 Szinkronizálás Beállításai
+                </h3>
+                <button onclick="closeSyncModal()" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: inherit;" title="Bezárás">✖</button>
+            </div>
+            
+            <p style="font-size: 13px; opacity: 0.85; margin-bottom: 1.2rem; line-height: 1.5;">
+                Kérlek válaszd ki, hogy melyik adatokat szeretnéd frissíteni és szinkronizálni a csatlakozott peerektől:
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button class="btn btn-primary" onclick="performSync('topics')" style="padding: 12px 14px; font-size: 14px; text-align: left; display: flex; align-items: center; gap: 12px; border-radius: 8px; cursor: pointer;">
+                    <span style="font-size: 24px;">💬</span>
+                    <div>
+                        <strong style="display: block;">Csak Topikok Szinkronizálása</strong>
+                        <span style="font-size: 12px; opacity: 0.85; font-weight: normal;">Topikok és hiányzó beszélgetések lekérése a csatlakozott peerektől</span>
+                    </div>
+                </button>
+
+                <button class="btn btn-primary" onclick="performSync('users')" style="padding: 12px 14px; font-size: 14px; text-align: left; display: flex; align-items: center; gap: 12px; background: #3b82f6; border-radius: 8px; cursor: pointer;">
+                    <span style="font-size: 24px;">👥</span>
+                    <div>
+                        <strong style="display: block;">Csak Ismerősök & Peerek Szinkronizálása</strong>
+                        <span style="font-size: 12px; opacity: 0.85; font-weight: normal;">Online peerek keresése és jelenléti lista frissítése</span>
+                    </div>
+                </button>
+
+                <button class="btn btn-primary" onclick="performSync('all')" style="padding: 12px 14px; font-size: 14px; text-align: left; display: flex; align-items: center; gap: 12px; background: #10b981; border-radius: 8px; cursor: pointer;">
+                    <span style="font-size: 24px;">🔄</span>
+                    <div>
+                        <strong style="display: block;">Mindent Szinkronizál (Topikok + Ismerősök)</strong>
+                        <span style="font-size: 12px; opacity: 0.85; font-weight: normal;">Teljes hálózati frissítés végrehajtása minden kategóriában</span>
+                    </div>
+                </button>
+            </div>
+
+            <div style="margin-top: 1.4rem; padding-top: 10px; border-top: 1px solid var(--input-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <label style="font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; user-select: none;">
+                    <input type="checkbox" id="restore-deleted-users-check"> Törölt ismerősök visszaállítása szinkronkor
+                </label>
+                <button class="btn" onclick="closeSyncModal()" style="background: #e2e8f0; color: #4a5568; padding: 6px 14px; font-size: 12px; cursor: pointer;">Mégse</button>
+            </div>
+        </div>
+    </div>
+
     <!-- WebRTC Stream & Voice Call Instant Player Popup Modal -->
     <div id="stream-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 2500;">
         <div class="modal-content" style="max-width: 780px; width: 92%; max-height: 90vh; background: var(--card-bg); color: var(--text-color); border-radius: 14px; padding: 1.2rem; box-shadow: 0 12px 35px rgba(0,0,0,0.5); display: flex; flex-direction: column; position: relative;">
@@ -1138,6 +1187,7 @@
         };
         let knownUsers = {}; // { peerId: { username, lastSeen } }
         let deletedTopicIds = [];
+        let deletedUserIds = [];
         let hostedFiles = {}; // { fileId: { fileId, name, type, size, data } }
         let selectedFile = null;
         let replyToMessage = null;
@@ -1164,6 +1214,7 @@
             loadData();
             loadKnownUsers();
             loadDeletedTopics();
+            loadDeletedUsers();
             loadHostedFiles();
             updateSoundButton();
             loadSoundType();
@@ -1177,6 +1228,12 @@
             if (savedUsername) {
                 document.getElementById('username-input').value = savedUsername;
                 setUsername();
+            }
+
+            // Restore saved active topic on refresh
+            const savedTopic = localStorage.getItem('p2p_current_topic');
+            if (savedTopic && data.topics[savedTopic] && !deletedTopicIds.includes(savedTopic)) {
+                selectTopic(savedTopic);
             }
         }
 
@@ -1953,14 +2010,17 @@
                 case 'presence':
                     // Update known users with peer's info
                     if (received.peerId && received.username) {
-                        knownUsers[received.peerId] = {
-                            username: received.username,
-                            lastSeen: Date.now()
-                        };
+                        if (!deletedUserIds.includes(received.peerId)) {
+                            knownUsers[received.peerId] = {
+                                username: received.username,
+                                lastSeen: Date.now()
+                            };
+                        }
                     }
                     // Merge known users from peer
                     if (received.knownUsers) {
                         for (const pid in received.knownUsers) {
+                            if (deletedUserIds.includes(pid)) continue;
                             if (!knownUsers[pid] || knownUsers[pid].lastSeen < received.knownUsers[pid].lastSeen) {
                                 knownUsers[pid] = received.knownUsers[pid];
                             }
@@ -1998,6 +2058,58 @@
                         triggerBrowserDownload(received.fileObj);
                     }
                     break;
+            }
+        }
+
+        // Sync Modal selection & execution
+        function openSyncModal() {
+            const modal = document.getElementById('sync-options-modal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeSyncModal() {
+            const modal = document.getElementById('sync-options-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function performSync(type) {
+            closeSyncModal();
+            const restoreDeleted = document.getElementById('restore-deleted-users-check')?.checked;
+
+            if (restoreDeleted) {
+                deletedUserIds = [];
+                saveDeletedUsers();
+            }
+
+            if (type === 'topics' || type === 'all') {
+                resyncTopics();
+            }
+
+            if (type === 'users' || type === 'all') {
+                manualRefresh();
+            }
+
+            if (type === 'topics') {
+                showNotification('💬 Topikok szinkronizálása elindítva!');
+            } else if (type === 'users') {
+                showNotification('👥 Ismerősök szinkronizálása elindítva!');
+            } else {
+                showNotification('🔄 Teljes szinkronizálás elindítva!');
+            }
+        }
+
+        function saveDeletedUsers() {
+            localStorage.setItem('p2p_deleted_users', JSON.stringify(deletedUserIds));
+        }
+
+        function loadDeletedUsers() {
+            const saved = localStorage.getItem('p2p_deleted_users');
+            if (saved) {
+                try {
+                    deletedUserIds = JSON.parse(saved);
+                } catch (e) {
+                    deletedUserIds = [];
+                }
             }
         }
 
@@ -2047,9 +2159,9 @@
         }
 
         function autoReconnect() {
-            // Reconnect to known peers (except self)
+            // Reconnect to known peers (except self & deleted peers)
             for (const peerId in knownUsers) {
-                if (peerId !== peer.id) {
+                if (peerId !== peer.id && !deletedUserIds.includes(peerId)) {
                     const isConnected = connections.some(c => c.peer === peerId);
                     if (!isConnected) {
                         // Try to connect with a small delay to avoid overwhelming
@@ -2063,7 +2175,7 @@
         }
 
         function manualRefresh() {
-            showNotification('Újracsatlakozás a ismert felhasználókhoz...');
+            showNotification('Újracsatlakozás az ismert felhasználókhoz...');
             autoReconnect();
             broadcastPresence();
         }
@@ -2092,7 +2204,7 @@
             const container = document.getElementById('user-list');
             container.innerHTML = '';
 
-            const userEntries = Object.entries(knownUsers);
+            const userEntries = Object.entries(knownUsers).filter(([pid]) => !deletedUserIds.includes(pid));
             if (userEntries.length === 0) {
                 container.innerHTML = '<div class="empty-state" style="padding: 1rem;">Nincs online felhasználó</div>';
                 return;
@@ -2123,8 +2235,19 @@
             const userInfo = knownUsers[peerId];
             const name = userInfo ? userInfo.username : peerId;
             if (confirm(`Biztosan törölni akarod a(z) "${name}" (${peerId}) felhasználót a saját listádról?`)) {
+                if (!deletedUserIds.includes(peerId)) {
+                    deletedUserIds.push(peerId);
+                    saveDeletedUsers();
+                }
                 delete knownUsers[peerId];
                 saveKnownUsers();
+
+                const conn = connections.find(c => c.peer === peerId);
+                if (conn) {
+                    try { conn.close(); } catch(e) {}
+                    connections = connections.filter(c => c !== conn);
+                }
+
                 renderUserList();
                 showNotification('Felhasználó eltávolítva a listádról!');
             }
@@ -2183,6 +2306,7 @@
 
         function selectTopic(topicId) {
             currentTopic = topicId;
+            localStorage.setItem('p2p_current_topic', topicId);
             const topic = data.topics[topicId];
             document.getElementById('current-topic-name').textContent = topic ? topic.name : '';
             const exportBtn = document.getElementById('export-txt-btn');
