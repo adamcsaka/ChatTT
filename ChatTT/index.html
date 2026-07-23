@@ -1039,7 +1039,9 @@
                 <div class="chat-input" style="position: relative;">
                     <input type="file" id="file-input" style="display: none;" onchange="handleFileSelect(event)">
                     <button class="btn" style="background: #edf2f7; color: #4a5568; padding: 8px 14px;" onclick="triggerFileSelect()" title="Kép / Fájl csatolása">📎</button>
-                    <button class="btn" style="background: #edf2f7; color: #4a5568; padding: 8px 14px;" onclick="toggleEmojiPicker()" title="Emoji beszúrása">😀</button>
+                    <button class="btn" style="background: #edf2f7; color: #4a5568; padding: 6px 12px; display: inline-flex; align-items: center; justify-content: center;" onclick="toggleEmojiPicker()" title="Emoji / Smiley választó megnyitása">
+                        <img src="emoticons/smile.png" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iI2ZiYzAyZCIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMS41IiBmaWxsPSIjMjEyMTIxIi8+PHBhdGggZD0iTTggMTQuNXMxLjUgMi41IDQgMi41IDQtMi41IDQtMi41IiBzdHJva2U9IiMyMTIxMjEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiLz48L3N2Zz4=';" alt="😀" style="width: 20px; height: 20px; vertical-align: middle;">
+                    </button>
                     <button class="btn" style="background: #feebc8; color: #744210; padding: 8px 12px; font-weight: bold; white-space: nowrap;" onclick="sendNudge()" title="Klasszikus MSN Rezgetés küldése a topik tagjainak!">🫨 Rezgés</button>
                     <input type="text" id="message-input" placeholder="Írj üzenetet..." onkeypress="handleKeyPress(event)">
                     <button class="btn btn-primary" onclick="sendMessage()">Küldés</button>

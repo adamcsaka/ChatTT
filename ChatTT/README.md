@@ -4,10 +4,13 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
 
 ---
 
-## ⚡ Főbb Funkciók (v3.0)
+## ⚡ Főbb Funkciók (v3.2)
 
+* 🎨 **Beágyazott Base64 Smiley & Web Audio Hang integráció**:
+  * Az emoji gomb képe (`emoticons/smile.png`) automata **Base64 Data URI SVG tartalék-rendszert** kapott, így a felület 100%-ban működik hiányzó fájlok esetén is!
+  * Az üzenethangok (MSN Chime, Rezgés, Pop, Bell) teljesen beágyazott **Web Audio API szintetizátorral** szólalnak meg, külső fájlfüggőségek nélkül.
 * 👥 **Tartós Ismerős Törlés & Böngészőfrissítés Védelem**:
-  * Törölt peerek/ismerősök megőrzése (`deletedUserIds` lista).
+  * Törölt peerek/ismerősök eltárolása (`deletedUserIds`).
   * Böngészőfrissítés után a törölt ismerősök **NEM térnek vissza automatikusan**, a megjegyzett beállítások fogadnak.
 * 🔄 **Interaktív Szinkronizálási Menü (Sync Options Modal)**:
   * A `🔄 Szinkronizálás` gombra kattintva felugró menüből választhatsz:
@@ -27,8 +30,8 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
   * Kényelmes felugró ablak a pineknek és médiafájloknak.
 * 📥 **TXT Beszélgetés Exportálás**:
   * Beszélgetések azonnali mentése és letöltése `.txt` fájlként.
-* 🫨 **MSN Nudge / Rezgetés & Üzenethangok**:
-  * Megrezgethető ablakok és kiválasztható MSN csengőhangok.
+* 🫨 **MSN Nudge / Rezgetés**:
+  * Megrezgethető ablakok a klasszikus MSN Messenger stílusában.
 
 ---
 
