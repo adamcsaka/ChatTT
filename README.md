@@ -4,6 +4,15 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
 
 ---
 
+## 🚀 Élő Online Chat (GitHub Pages)
+
+Bárhonnan azonnal megnyitható a legújabb verzió:
+👉 **[https://adamcsaka.github.io/ChatTT/](https://adamcsaka.github.io/ChatTT/)**
+
+*Minden Git feltöltéssel (git push) az online verzió automatikusan frissül a legújabb kódra!*
+
+---
+
 ## ⚡ Főbb Funkciók (v3.2)
 
 * 🎨 **Beágyazott Base64 Smiley & Web Audio Hang integráció**:
@@ -37,6 +46,6 @@ Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat 
 
 ## 🚀 Használat
 
-1. Nyisd meg a `ChatTT/index.html` fájlt bármilyen modern böngészőben.
+1. Nyisd meg a **[https://adamcsaka.github.io/ChatTT/](https://adamcsaka.github.io/ChatTT/)** címe a böngésződben (vagy helyileg az `index.html` fájlt).
 2. Add meg a felhasználónevedet és a Peer ID-dat (pl. `1` vagy `2`).
 3. Csatlakozz az ismerőseidhez és használd a P2P funkciókat!
