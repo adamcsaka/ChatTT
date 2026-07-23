@@ -1,0 +1,3441 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Reddit - Szerver Nélküli Chat</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --primary-hover: #5568d3;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --input-bg: #ffffff;
+            --input-border: #ddd;
+            --peer-info-bg: #f0f0f0;
+            --own-msg-bg: #667eea;
+            --own-msg-text: #ffffff;
+            --other-msg-bg: #ffffff;
+            --other-msg-text: #333333;
+        }
+
+        body.theme-blue {
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --primary-color: #2a5298;
+            --primary-hover: #1e3c72;
+        }
+
+        body.theme-emerald {
+            --bg-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            --primary-color: #059669;
+            --primary-hover: #047857;
+        }
+
+        body.theme-orange {
+            --bg-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            --primary-color: #ea580c;
+            --primary-hover: #c2410c;
+        }
+
+        body.theme-dark {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --input-bg: #0f172a;
+            --input-border: #334155;
+            --peer-info-bg: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border-radius: 0px !important; /* Total sharp edges - No rounded corners */
+        }
+
+        html, body {
+            height: 100vh;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+        }
+
+        #username-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 2rem;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            border: 1px solid var(--input-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-color);
+            font-size: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .modal-content button:hover {
+            background: var(--primary-hover);
+        }
+
+        #app {
+            display: none;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 0.7rem 1.2rem;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--input-border);
+            flex-shrink: 0;
+            height: 52px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .user-info {
+            font-weight: bold;
+            opacity: 0.9;
+        }
+
+        .connection-status {
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .connected {
+            background: #10b981;
+            color: white;
+        }
+
+        .disconnected {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: 1px solid var(--input-border);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: calc(100vh - 72px);
+            overflow: hidden;
+            gap: 0;
+        }
+
+        .sidebar {
+            width: 320px;
+            min-width: 180px;
+            max-width: 600px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.2rem;
+            border: 1px solid var(--input-border);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        /* Total Commander Style Draggable Splitter Bar */
+        .resizer-splitter {
+            width: 7px;
+            background: var(--input-border);
+            cursor: col-resize;
+            flex-shrink: 0;
+            user-select: none;
+            transition: background 0.15s;
+            z-index: 20;
+            border-left: 1px solid rgba(0,0,0,0.1);
+            border-right: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .resizer-splitter:hover, .resizer-splitter.is-resizing {
+            background: var(--primary-color);
+        }
+
+        .chat-area {
+            flex: 1;
+            min-width: 300px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.2rem;
+            border: 1px solid var(--input-border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .right-panel {
+            width: 320px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            transition: all 0.3s ease;
+        }
+
+        .right-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--input-border);
+            margin-bottom: 12px;
+        }
+
+        .right-panel-tabs {
+            display: flex;
+            gap: 6px;
+        }
+
+        .right-tab {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .right-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .right-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 4px;
+        }
+
+        .pinned-card {
+            background: var(--peer-info-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .pinned-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .pinned-card .pinned-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            opacity: 0.75;
+            margin-bottom: 4px;
+        }
+
+        .pinned-card .unpin-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            opacity: 0.6;
+            color: #ef4444;
+            padding: 0 2px;
+        }
+
+        .pinned-card .unpin-btn:hover {
+            opacity: 1;
+        }
+
+        .media-card {
+            background: var(--peer-info-bg);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 12px;
+            border: 1px solid var(--input-border);
+        }
+
+        .media-card img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 6px;
+            object-fit: cover;
+            cursor: pointer;
+            display: block;
+        }
+
+        .pin-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            margin-left: 6px;
+            color: inherit;
+        }
+
+        .message:hover .pin-btn {
+            opacity: 0.8;
+        }
+        
+        .message.is-pinned {
+            border-left: 3px solid #f59e0b;
+        }
+
+        .message.is-pinned .pin-btn {
+            opacity: 1;
+            color: #f59e0b;
+        }
+
+        .sidebar {
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .create-topic {
+            margin-bottom: 0.5rem;
+        }
+
+        .create-topic input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .topic-list {
+            list-style: none;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            padding: 4px;
+            background: var(--input-bg);
+        }
+
+        .topic-item {
+            padding: 12px;
+            border-bottom: 1px solid var(--input-border);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topic-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .topic-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .topic-item .topic-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .topic-item .topic-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topic-item .topic-count {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .topic-item .delete-topic-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            opacity: 0.5;
+            transition: all 0.2s;
+            color: inherit;
+        }
+
+        .topic-item:hover .delete-topic-btn {
+            opacity: 1;
+        }
+
+        .topic-item .delete-topic-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .chat-area {
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 650px;
+            height: calc(100vh - 130px);
+        }
+
+        #discord-stream-container.is-pip {
+            position: fixed !important;
+            bottom: 24px !important;
+            right: 24px !important;
+            width: 340px !important;
+            height: 220px !important;
+            margin: 0 !important;
+            z-index: 99999 !important;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6) !important;
+            border: 2px solid var(--primary-color) !important;
+        }
+
+        #discord-stream-container.is-pip #docked-stream-video {
+            max-height: 175px !important;
+        }
+
+        .chat-header {
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--input-border);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: var(--primary-color);
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: var(--peer-info-bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message .username {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+
+        .message .timestamp {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-left: 10px;
+        }
+
+        .message .content {
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .message.own {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .message.own .username {
+            color: white;
+        }
+
+        .message.own .timestamp {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .file-preview {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #2d3748;
+        }
+
+        .file-preview .file-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .file-preview .remove-file-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #ef4444;
+            font-size: 16px;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .message-attachment {
+            margin-top: 8px;
+        }
+
+        .message-attachment img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: block;
+        }
+
+        .message-attachment img:hover {
+            transform: scale(1.02);
+        }
+
+        .file-download-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 6px;
+            margin-top: 6px;
+            font-size: 13px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .message.own .file-download-box {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .reply-preview {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 4px solid #667eea;
+            color: #2d3748;
+        }
+
+        .reply-preview .reply-info {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .reply-preview .remove-reply-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #ef4444;
+            font-size: 16px;
+            padding: 0 4px;
+            line-height: 1;
+            margin-left: 8px;
+        }
+
+        .message-reply-quote {
+            background: rgba(0, 0, 0, 0.06);
+            border-left: 3px solid #667eea;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #4a5568;
+        }
+
+        .message.own .message-reply-quote {
+            background: rgba(255, 255, 255, 0.2);
+            border-left-color: white;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .reply-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            margin-left: 8px;
+            color: #667eea;
+        }
+
+        .message.own .reply-btn {
+            color: white;
+        }
+
+        .message:hover .reply-btn {
+            opacity: 1;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .peer-info {
+            margin-top: 1rem;
+            padding: 10px;
+            background: var(--peer-info-bg);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .peer-info label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .peer-info input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .user-list {
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--input-border);
+            transition: background 0.2s;
+        }
+
+        .user-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .user-item .user-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .user-item .user-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .user-item .user-status.online {
+            background: #10b981;
+            color: white;
+        }
+
+        .user-item .user-status.offline {
+            background: #999;
+            color: white;
+        }
+
+        .user-item .connect-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .user-item .connect-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .delete-user-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            opacity: 0.6;
+            transition: opacity 0.2s, background 0.2s;
+            margin-left: 4px;
+            color: inherit;
+        }
+
+        .delete-user-btn:hover {
+            opacity: 1;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .user-item .connect-btn.connected {
+            background: #10b981;
+            cursor: default;
+        }
+
+        .user-item .connect-btn.own {
+            background: #999;
+            cursor: default;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #10b981;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes msn-nudge-shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-8px, -5px) rotate(-1deg); }
+            20% { transform: translate(8px, 5px) rotate(1deg); }
+            30% { transform: translate(-8px, 5px) rotate(0deg); }
+            40% { transform: translate(8px, -5px) rotate(1deg); }
+            50% { transform: translate(-5px, -5px) rotate(-1deg); }
+            60% { transform: translate(5px, 5px) rotate(0deg); }
+            70% { transform: translate(-5px, 2px) rotate(0deg); }
+            80% { transform: translate(5px, -2px) rotate(0deg); }
+            90% { transform: translate(-2px, 0px) rotate(0deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .nudge-anim {
+            animation: msn-nudge-shake 0.6s ease-in-out;
+        }
+
+        .emoji-picker-popover {
+            position: absolute;
+            bottom: 60px;
+            left: 50px;
+            width: 320px;
+            max-height: 260px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            animation: popIn 0.2s ease;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .emoji-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--input-border);
+            color: var(--primary-color);
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            overflow-y: auto;
+            max-height: 200px;
+            padding-right: 4px;
+        }
+
+        .emoji-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.1s;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .emoji-item:hover {
+            transform: scale(1.25);
+            background: rgba(102, 126, 234, 0.15);
+        }
+
+        .nudge-message-box {
+            background: #fef3c7 !important;
+            color: #92400e !important;
+            border: 2px dashed #f59e0b !important;
+            font-weight: bold;
+            text-align: center;
+            animation: pulseNudge 0.5s ease;
+        }
+
+        @keyframes pulseNudge {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .msn-emoji {
+            font-size: 1.15em;
+            vertical-align: middle;
+            display: inline-block;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="username-modal">
+        <div class="modal-content">
+            <h2>👋 Üdvözöljük!</h2>
+            <div style="text-align: left; margin-bottom: 1rem;">
+                <label style="font-size: 14px; color: #666; font-weight: 500; display: block; margin-bottom: 4px;">Felhasználónév:</label>
+                <input type="text" id="username-input" placeholder="pl. Anna" maxlength="20">
+                <label style="font-size: 14px; color: #666; font-weight: 500; display: block; margin-bottom: 4px; margin-top: 10px;">Saját ID / Peer ID (pl. 1, 2, user1):</label>
+                <input type="text" id="peerid-input" placeholder="pl. 1 vagy 2" maxlength="30">
+            </div>
+            <button onclick="setUsername()">Belépés</button>
+        </div>
+    </div>
+
+    <div id="theme-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000;">
+        <div class="modal-content" style="max-width: 520px; text-align: left; background: var(--card-bg); color: var(--text-color); border-radius: 12px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; border-bottom: 1px solid var(--input-border); padding-bottom: 10px;">
+                <h3 style="margin: 0; color: var(--primary-color);">🎨 Színek Részletes Testreszabása</h3>
+                <button onclick="closeThemeModal()" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: inherit;">✖</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 14px;">
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Főszín / Gombok:</label>
+                    <input type="color" id="picker-primary" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Háttér színe:</label>
+                    <input type="color" id="picker-bg" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Ablakok / Kártyák:</label>
+                    <input type="color" id="picker-card" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Főszöveg színe:</label>
+                    <input type="color" id="picker-text" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Saját üzenet buborék:</label>
+                    <input type="color" id="picker-own-msg" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Saját üzenet szövege:</label>
+                    <input type="color" id="picker-own-msg-text" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Mások üzenet buboréka:</label>
+                    <input type="color" id="picker-other-msg" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-weight: 500;">Mások üzenet szövege:</label>
+                    <input type="color" id="picker-other-msg-text" oninput="applyCustomThemeFromModal()" onchange="applyCustomThemeFromModal()" style="width: 100%; height: 38px; border-radius: 6px; cursor: pointer; border: 1px solid var(--input-border); background: transparent;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+                <button class="btn btn-primary" onclick="closeThemeModal()" style="flex: 1;">Kész / Mentés</button>
+                <button class="btn" onclick="resetThemeDefaults()" style="background: #e2e8f0; color: #4a5568;">Alapértelmezett</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discord-Style Live Stream Viewer Modal -->
+    <div id="stream-viewer-modal" class="modal" style="display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 25000;">
+        <div style="background: var(--card-bg); color: var(--text-color); padding: 20px; border-radius: 14px; max-width: 900px; width: 95%; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); border: 2px solid var(--primary-color); display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--input-border); padding-bottom: 10px;">
+                <h3 id="stream-modal-title" style="font-size: 16px; color: var(--primary-color); display: flex; align-items: center; gap: 8px;">🖥️ Discord-Style Képernyő Stream</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" onclick="toggleStreamFullscreen()" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border); padding: 4px 10px; font-size: 12px; cursor: pointer;">⛶ Teljes Képernyő</button>
+                    <button id="stop-stream-btn" class="btn btn-danger" onclick="stopScreenShare()" style="display: none; padding: 4px 10px; font-size: 12px; cursor: pointer;">🔴 Stream Leállítása</button>
+                    <button onclick="closeStreamViewerModal()" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: inherit;" title="Ablak bezárása">✖</button>
+                </div>
+            </div>
+            <div style="position: relative; background: #000; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                <video id="screen-stream-video" autoplay playsinline style="width: 100%; max-height: 65vh; object-fit: contain;"></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Version Available Modal -->
+    <div id="version-update-modal" class="modal" style="display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 20000;">
+        <div style="background: var(--card-bg); color: var(--text-color); padding: 24px; border-radius: 14px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 12px 35px rgba(0,0,0,0.5); border: 2px solid var(--primary-color);">
+            <div style="font-size: 44px; margin-bottom: 8px;">🚀</div>
+            <h3 style="margin-bottom: 8px; font-size: 19px; color: var(--primary-color);">Új verzió érhető el!</h3>
+            <p style="font-size: 13.5px; opacity: 0.9; margin-bottom: 16px;">Egy újabb frissítés jelent meg a ChatTT-ből.<br>Nyomj <strong>F5</strong>-öt vagy kattints az alábbi gombra az azonnali frissítéshez!</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-primary" onclick="window.location.reload(true)" style="flex: 1; padding: 11px; font-weight: bold; font-size: 14px; cursor: pointer;">🔄 Oldal Frissítése (F5)</button>
+                <button class="btn" onclick="closeVersionModal()" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border); padding: 11px; cursor: pointer;">Később</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incoming Voice Call Modal -->
+    <div id="voice-call-modal" class="modal" style="display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000;">
+        <div style="background: var(--card-bg); color: var(--text-color); padding: 24px; border-radius: 14px; max-width: 380px; width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 2px solid var(--primary-color);">
+            <div style="font-size: 42px; margin-bottom: 8px; animation: pulse 1s infinite;">📞</div>
+            <h3 style="margin-bottom: 8px; font-size: 18px;">Bejövő Hanghívás (MSN Audio)</h3>
+            <p id="call-caller-name" style="font-size: 13.5px; opacity: 0.9; margin-bottom: 20px;">@felhasználó hív téged...</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-primary" onclick="acceptVoiceCall()" style="background: #22c55e; border-color: #16a34a; flex: 1; padding: 10px; font-weight: bold; cursor: pointer;">✅ Fogadás (Mikrofon)</button>
+                <button class="btn btn-danger" onclick="rejectVoiceCall()" style="background: #ef4444; border-color: #dc2626; flex: 1; padding: 10px; font-weight: bold; cursor: pointer;">❌ Elutasítás</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app">
+        <header>
+            <h1 style="display: flex; align-items: center; gap: 8px;">
+                <span id="app-title-display">💬 MSN Messenger P2P</span>
+                <button class="btn" style="background: transparent; padding: 2px 6px; font-size: 14px; opacity: 0.6; color: inherit;" onclick="editAppTitle()" title="Alkalmazás címének módosítása">✏️</button>
+            </h1>
+            <div class="header-controls">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <button id="sound-toggle-btn" class="btn" onclick="toggleSound()" style="padding: 6px 10px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border); cursor: pointer;" title="MSN Értesítési Hangok Be/Ki">🔔 Hang: BE</button>
+                    <select id="theme-select" onchange="changeTheme(this.value)" class="btn" style="background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border); cursor: pointer;" title="Színtéma kiválasztása">
+                        <option value="default">💜 Ibolya</option>
+                        <option value="blue">💙 Kék (Classic MSN)</option>
+                        <option value="emerald">💚 Smaragd Zöld</option>
+                        <option value="orange">🧡 Narancs</option>
+                        <option value="dark">🖤 Sötét Mód</option>
+                        <option value="custom">🎨 Egyedi RGB Szín</option>
+                    </select>
+                    <input type="color" id="custom-color-picker" oninput="setCustomColor(this.value)" onchange="setCustomColor(this.value)" value="#667eea" title="Konkrét RGB / Hex szín kiválasztása" style="width: 32px; height: 32px; padding: 1px; border-radius: 6px; border: 1px solid var(--input-border); cursor: pointer; background: transparent;">
+                    <button class="btn" onclick="openThemeModal()" style="padding: 6px 10px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border); cursor: pointer;" title="Minden szín részletes testreszabása">⚙️ Színek</button>
+                </div>
+                <span class="user-info" id="current-user"></span>
+                <span class="connection-status disconnected" id="connection-status">Kapcsolatlan</span>
+                <button class="btn btn-primary" onclick="resyncTopics()" title="Törölt topikok újraszinkronizálása a csatlakozott peerektől">🔄 Szinkronizálás</button>
+                <button class="btn btn-danger" onclick="clearAllData()">🗑️ Adatok törlése</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar" id="sidebar-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin-bottom: 0;">💬 Topikok</h3>
+                    <button class="btn btn-primary" onclick="resyncTopics()" style="font-size: 12px; padding: 4px 8px;" title="Törölt topikok visszahozása szinkronizálással">🔄 Szinkron</button>
+                </div>
+                <div class="create-topic">
+                    <input type="text" id="new-topic-input" placeholder="Új topik neve..." maxlength="50">
+                    <button class="btn btn-primary" onclick="createTopic()" style="width: 100%;">+ Új topik</button>
+                </div>
+                <ul class="topic-list" id="topic-list"></ul>
+                
+                <div class="peer-info" style="margin-top: 2rem;">
+                    <label>🔗 Saját Peer ID (pl. 1, 2):</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="own-peer-id" placeholder="pl. 1" style="flex: 1;">
+                        <button class="btn btn-primary" onclick="changePeerId()" style="padding: 6px 12px; white-space: nowrap;">Mentés</button>
+                    </div>
+                </div>
+                
+                <div class="peer-info" style="margin-top: 1rem;">
+                    <label>👥 Felhasználók (Online / Offline):</label>
+                    <div class="user-list" id="user-list">
+                        <div class="empty-state" style="padding: 1rem;">Nincs felhasználó</div>
+                    </div>
+                </div>
+                
+                <div class="peer-info" style="margin-top: 1rem;">
+                    <label>🔗 Csatlakozás Peer ID-hoz (kézi):</label>
+                    <input type="text" id="connect-peer-id" placeholder="Peer ID beillesztése...">
+                    <button class="btn btn-primary" onclick="connectToPeer()" style="width: 100%; margin-top: 10px;">Csatlakozás</button>
+                </div>
+            </div>
+
+            <!-- Total Commander Style Draggable Vertical Resizer Splitter -->
+            <div id="resizer-splitter" class="resizer-splitter" title="Húzd a panelméretek állításához (Total Commander stílus)"></div>
+
+            <div class="chat-area" id="chat-area-panel">
+                <!-- Active Voice Call Bar -->
+                <div id="active-call-bar" style="display: none; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 8px 16px; border-radius: 8px; margin: 10px 10px 0 10px; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 20px;">🎙️</span>
+                        <div>
+                            <strong id="active-call-user">Hanghívás folyamatban</strong>
+                            <span id="active-call-timer" style="font-size: 12px; opacity: 0.9; margin-left: 8px; font-family: monospace;">00:00</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select id="mic-input-select" onchange="changeMicrophoneDevice(this.value)" class="btn" style="background: rgba(255,255,255,0.25); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 4px 8px; font-size: 12px; cursor: pointer; max-width: 170px;" title="Válassz mikrofon bemeneti eszközt">
+                            <option value="" style="color: #000;">🎤 Alapértelmezett Mikrofon</option>
+                        </select>
+                        <button class="btn" onclick="startScreenShare()" style="background: rgba(255,255,255,0.25); color: white; padding: 5px 12px; font-size: 12px; cursor: pointer;" title="Discord-style élő képernyő és játék megosztás">🖥️ Stream</button>
+                        <button id="mute-mic-btn" class="btn" onclick="toggleMuteMicrophone()" style="background: rgba(255,255,255,0.25); color: white; padding: 5px 12px; font-size: 12px; cursor: pointer;">🎤 Némítás</button>
+                        <button class="btn" onclick="endVoiceCall()" style="background: #dc2626; color: white; padding: 5px 12px; font-size: 12px; font-weight: bold; cursor: pointer;">🔴 Hívás Befejezése</button>
+                    </div>
+                </div>
+                <audio id="remote-audio-player" autoplay style="display: none;"></audio>
+
+                <!-- Stream Invitation Banner (Opt-In Discord Style) -->
+                <div id="stream-invite-banner" style="display: none; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 10px 16px; border-radius: 8px; margin: 10px 10px 0 10px; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(99,102,241,0.35);">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 22px;">🖥️</span>
+                        <div>
+                            <strong id="stream-invite-text">@felhasználó élő adást indított!</strong>
+                            <div style="font-size: 11px; opacity: 0.9;">Kattints a csatlakozáshoz, ha szeretnéd élőben nézni a streamet.</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="acceptStreamInvite()" class="btn btn-primary" style="background: #22c55e; border-color: #16a34a; font-weight: bold; font-size: 12px; cursor: pointer;">▶️ Csatlakozás a Streamhez</button>
+                        <button onclick="dismissStreamInvite()" class="btn" style="background: rgba(255,255,255,0.2); color: white; font-size: 12px; cursor: pointer;">Mégse</button>
+                    </div>
+                </div>
+
+                <!-- Docked Live Video Stream Player (Discord Style - Non-Blocking Chat) -->
+                <div id="discord-stream-container" style="display: none; background: #0b0f19; border-radius: 10px; margin: 0 0 12px 0; border: 2px solid var(--primary-color); overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.4); flex-direction: column; flex-shrink: 0;">
+                    <div style="background: rgba(15,23,42,0.9); color: white; padding: 6px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <span id="docked-stream-title" style="font-weight: bold; color: #818cf8; display: flex; align-items: center; gap: 6px;">🔴 LIVE Stream</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button id="pip-toggle-btn" onclick="togglePipMode()" class="btn" style="padding: 3px 8px; font-size: 11px; background: rgba(255,255,255,0.15); color: white; cursor: pointer;" title="Lebegő mini ablakba helyezés">📌 Mini Nézet (PIP)</button>
+                            <button onclick="toggleStreamFullscreen()" class="btn" style="padding: 3px 8px; font-size: 11px; background: rgba(255,255,255,0.15); color: white; cursor: pointer;" title="Teljes képernyő">⛶ Teljes Képernyő</button>
+                            <button onclick="leaveStream()" class="btn btn-danger" style="padding: 3px 8px; font-size: 11px; cursor: pointer;">❌ Stream Bezárása</button>
+                        </div>
+                    </div>
+                    <div style="position: relative; background: #000; display: flex; justify-content: center; align-items: center;">
+                        <video id="docked-stream-video" autoplay playsinline style="width: 100%; max-height: 240px; object-fit: contain; background: #000; display: block;"></video>
+                    </div>
+                </div>
+
+                <div class="chat-header">
+                    <h3 id="current-topic-name">Válassz egy topikot</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-primary" onclick="startVoiceCall()" style="font-size: 13px;" title="MSN Mikrofonos Hanghívás indítása az első csatlakozott partnerrel">🎙️ Hanghívás</button>
+                        <button class="btn btn-primary" onclick="startScreenShare()" style="font-size: 13px; background: #6366f1;" title="Discord-style élő képernyő megosztás / stream indítása">🖥️ Képernyő Stream</button>
+                        <button id="export-txt-btn" class="btn btn-primary" onclick="exportTopicToTxt()" style="display: none; font-size: 13px;">📥 Mentés TXT-ként</button>
+                        <button id="right-panel-toggle-btn" class="btn" onclick="openPinsMediaModal()" style="font-size: 13px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border);" title="📌 Rögzített üzenetek & Média felugró ablak megnyitása">📌 Rögzítettek & Média</button>
+                    </div>
+                </div>
+                <div class="messages" id="messages"></div>
+                <div class="reply-preview" id="reply-preview">
+                    <div class="reply-info" id="reply-preview-info"></div>
+                    <button class="remove-reply-btn" onclick="cancelReply()" title="Válasz megszakítása">✖</button>
+                </div>
+                <div class="file-preview" id="file-preview">
+                    <div class="file-info" id="file-preview-info"></div>
+                    <button class="remove-file-btn" onclick="removeSelectedFile()" title="Fájl eltávolítása">✖</button>
+                </div>
+                <div class="chat-input" style="position: relative;">
+                    <input type="file" id="file-input" style="display: none;" onchange="handleFileSelect(event)">
+                    <button class="btn" style="background: #edf2f7; color: #4a5568; padding: 8px 12px;" onclick="triggerFileSelect()" title="Kép / Fájl csatolása">📎</button>
+                    <button class="btn" style="background: #edf2f7; color: #4a5568; padding: 6px 10px;" onclick="toggleEmojiPicker(event)" title="MSN Emotikonok"><img src="emoticons/smile.png" alt="😊" onerror="this.outerHTML='😊';" style="width: 19px; height: 19px; vertical-align: middle; display: inline-block;"></button>
+                    <button class="btn" style="background: #f59e0b; color: white; padding: 8px 12px; font-weight: bold;" onclick="sendNudge()" title="Rengés küldése (MSN Nudge)">⚡ Rengés</button>
+                    <input type="text" id="message-input" placeholder="Írj üzenetet..." onkeypress="handleKeyPress(event)">
+                    <button class="btn btn-primary" onclick="sendMessage()">Küldés</button>
+
+                    <!-- Emoji Picker Popover -->
+                    <div id="emoji-picker" class="emoji-picker-popover" style="display: none;">
+                        <div class="emoji-picker-header">
+                            <span><img src="emoticons/smile.png" alt="😊" onerror="this.outerHTML='😊';" style="width: 17px; height: 17px; vertical-align: middle; margin-right: 4px;"> MSN Emotikonok</span>
+                            <button onclick="toggleEmojiPicker(event)" style="background: transparent; border: none; font-size: 14px; cursor: pointer; color: inherit;">✖</button>
+                        </div>
+                        <div class="emoji-grid" id="emoji-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pinned Messages & Media Files Modal Popup -->
+    <div id="pins-media-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000;">
+        <div class="modal-content" style="max-width: 650px; width: 90%; max-height: 85vh; text-align: left; background: var(--card-bg); color: var(--text-color); border-radius: 12px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.35); display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--input-border); padding-bottom: 10px;">
+                <div class="right-panel-tabs">
+                    <button class="right-tab active" id="tab-btn-pins" onclick="switchRightTab('pins')">📌 Rögzített Üzenetek (<span id="pins-count">0</span>)</button>
+                    <button class="right-tab" id="tab-btn-media" onclick="switchRightTab('media')">📁 Média & Fájlok (<span id="media-count">0</span>)</button>
+                </div>
+                <button onclick="closePinsMediaModal()" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: inherit;" title="Bezárás">✖</button>
+            </div>
+            <div class="right-panel-body" id="right-tab-content-pins" style="max-height: 60vh;">
+                <div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek rögzített üzenetek ebben a topikban.<br><br><i>Kattints az üzenetek melletti 📌 ikonra a kitűzéshez!</i></div>
+            </div>
+            <div class="right-panel-body" id="right-tab-content-media" style="display: none; max-height: 60vh;">
+                <div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek feltöltött fájlok ebben a topikban.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let username = '';
+        let peer = null;
+        let connections = [];
+        let currentTopic = null;
+        let data = {
+            topics: {},
+            messages: {}
+        };
+        let knownUsers = {}; // { peerId: { username, lastSeen } }
+        let deletedTopicIds = [];
+        let hostedFiles = {}; // { fileId: { fileId, name, type, size, data } }
+        let selectedFile = null;
+        let replyToMessage = null;
+
+        // MSN Audio & Emoji State
+        let soundEnabled = true;
+
+        const msnEmojis = [
+            { code: ':-)', alt: ':)', file: 'smile.png', title: 'Smile (Mosoly)' },
+            { code: ';-)', alt: ';)', file: 'wink.gif', title: 'Wink (Kacsintás)' },
+            { code: ':-D', alt: ':D', file: 'laugh.png', title: 'Laugh (Nevetés)' },
+            { code: ':-P', alt: ':P', file: 'tongue.png', title: 'Tongue (Nyelvnyújtás)' },
+            { code: ':-p', alt: ':p', file: 'tongue.png', title: 'Tongue' },
+            { code: ':-O', alt: ':O', file: 'ooh.png', title: 'Surprised (Meglepett)' },
+            { code: ':-o', alt: ':o', file: 'ooh.png', title: 'Surprised' },
+            { code: ':-|', alt: ':|', file: 'erm.png', title: 'Disappointed (Csalódott)' },
+            { code: ':\'(', file: 'cry.gif', title: 'Crying (Sírás)' },
+            { code: ':-@', alt: ':@', file: 'angry.png', title: 'Angry (Mérges)' },
+            { code: ':-$', alt: ':$', file: 'blush.png', title: 'Embarrassed (Pironkodó)' },
+            { code: '8-)', alt: '8)', file: 'cool.png', title: 'Cool (Menő)' },
+            { code: '(A)', alt: '(a)', file: 'angel.png', title: 'Angel (Angyal)' },
+            { code: '(6)', alt: '(H)', file: 'devil.png', title: 'Devil (Ördög)' },
+            { code: '(h)', file: 'devil.png', title: 'Devil' },
+            { code: '(L)', alt: '(l)', file: 'heart.png', title: 'Heart (Szív)' },
+            { code: '<3', file: 'heart.png', title: 'Heart' },
+            { code: '(U)', alt: '(u)', file: 'broken.png', title: 'Broken Heart (Törött szív)' },
+            { code: '(K)', alt: '(k)', file: 'kiss.png', title: 'Kiss (Csók)' },
+            { code: '(F)', alt: '(f)', file: 'rose.png', title: 'Rose (Rózsa)' },
+            { code: '(W)', alt: '(w)', file: 'wilted.png', title: 'Wilted Rose (Harmatos rózsa)' },
+            { code: '(*)', file: 'star.png', title: 'Star (Csillag)' },
+            { code: '(8)', file: 'note.png', title: 'Music (Zene)' },
+            { code: '(T)', alt: '(t)', file: 'telephone.png', title: 'Phone (Telefon)' },
+            { code: '(I)', alt: '(i)', file: 'lightbulb.png', title: 'Idea (Ötlet)' },
+            { code: '(C)', alt: '(c)', file: 'coffee.png', title: 'Coffee (Kávé)' },
+            { code: '(B)', alt: '(b)', file: 'beer.png', title: 'Beer (Sör)' },
+            { code: '(D)', alt: '(d)', file: 'cocktail.png', title: 'Drink (Ital)' },
+            { code: '(^)', file: 'cake.gif', title: 'Cake (Torta)' },
+            { code: '(#)', file: 'sun.png', title: 'Sun (Nap)' },
+            { code: '(S)', alt: '(s)', file: 'moon.png', title: 'Moon (Hold)' },
+            { code: '(G)', alt: '(g)', file: 'gift.png', title: 'Gift (Ajándék)' },
+            { code: '(dog)', file: 'dog.png', title: 'Dog (Kutya)' },
+            { code: '(cat)', file: 'cat.png', title: 'Cat (Macska)' },
+            { code: '(car)', alt: '(au)', file: 'car.gif', title: 'Car (Autó)' },
+            { code: '(plane)', alt: '(ap)', file: 'plane.gif', title: 'Plane (Repülő)' },
+            { code: '(clock)', file: 'clock.png', title: 'Clock (Óra)' },
+            { code: '(P)', alt: '(p)', file: 'camera.png', title: 'Camera (Kamera)' },
+            { code: '(pi)', file: 'pizza.gif', title: 'Pizza' },
+            { code: '(so)', file: 'chops.gif', title: 'Soccer (Foci)' },
+            { code: '(R)', alt: '(r)', file: 'umbrella.gif', title: 'Umbrella (Esernyő)' },
+            { code: '(Z)', file: 'guy.png', title: 'Boy (Fiú)' },
+            { code: '(X)', file: 'girl.png', title: 'Girl (Lány)' },
+            { code: '(Y)', alt: '(y)', file: 'thup.png', title: 'Thumbs up (Tetszik)' },
+            { code: '(N)', alt: '(n)', file: 'thdown.png', title: 'Thumbs down (Nem tetszik)' },
+            { code: '(brb)', file: 'brb.gif', title: 'Be Right Back' },
+            { code: '(h5)', file: 'hi5.gif', title: 'High Five' },
+            { code: '(st)', file: 'storm.gif', title: 'Storm Cloud' },
+            { code: '(li)', file: 'lightning.gif', title: 'Lightning' },
+            { code: '(mo)', file: 'coins.gif', title: 'Money' },
+            { code: '(co)', file: 'computer.gif', title: 'Computer' },
+            { code: '(mp)', file: 'mobile.gif', title: 'Mobile Phone' },
+            { code: '(sn)', file: 'snail.gif', title: 'Snail' },
+            { code: '(tu)', file: 'turtle.gif', title: 'Turtle' },
+            { code: '(bah)', file: 'sheep.gif', title: 'Black Sheep' }
+        ];
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-toggle-btn');
+            if (btn) btn.textContent = soundEnabled ? '🔔 Hang: BE' : '🔕 Hang: KI';
+            showNotification(soundEnabled ? 'MSN Értesítési hangok bekapcsolva!' : 'Hangok kikapcsolva!');
+        }
+
+        function playMsnSound(type) {
+            if (!soundEnabled) return;
+            try {
+                let fileName = 'type.mp3';
+                if (type === 'message') fileName = 'type.mp3';
+                else if (type === 'online') fileName = 'online.mp3';
+                else if (type === 'nudge') fileName = 'nudge.mp3';
+                else if (type === 'send') fileName = 'outgoing.mp3';
+                else if (type === 'email') fileName = 'newemail.mp3';
+                else if (type === 'alert') fileName = 'newalert.mp3';
+                else if (type === 'phone') fileName = 'phone.mp3';
+
+                const audio = new Audio('sounds/' + fileName);
+                audio.play().catch(e => console.warn('Audio play error:', e));
+            } catch(e) {
+                console.warn('Sound play error:', e);
+            }
+        }
+
+        // MSN Nudge & Emoji Functions
+        function triggerNudgeEffect(senderName) {
+            playMsnSound('nudge');
+            const appEl = document.getElementById('app') || document.body;
+            appEl.classList.remove('nudge-anim');
+            void appEl.offsetWidth; // Force reflow
+            appEl.classList.add('nudge-anim');
+            setTimeout(() => {
+                appEl.classList.remove('nudge-anim');
+            }, 650);
+            showNotification(`⚡ ${senderName} RENGÉST KÜLDÖTT! (MSN Nudge)`, 'error');
+        }
+
+        function sendNudge() {
+            if (!currentTopic) {
+                showNotification('Kérlek válassz egy topikot a rengés küldéséhez!', 'error');
+                return;
+            }
+
+            const message = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                content: '⚡ RENGÉST KÜLDÖTT! (MSN Nudge)',
+                username: username,
+                timestamp: new Date().toISOString(),
+                isNudge: true
+            };
+
+            if (!data.messages[currentTopic]) {
+                data.messages[currentTopic] = [];
+            }
+            data.messages[currentTopic].push(message);
+            saveData();
+
+            broadcast({
+                type: 'new_message',
+                topicId: currentTopic,
+                message: message
+            });
+
+            renderMessages();
+            triggerNudgeEffect(username);
+        }
+
+        function toggleEmojiPicker(e) {
+            if (e) e.stopPropagation();
+            const picker = document.getElementById('emoji-picker');
+            if (!picker) return;
+            if (picker.style.display === 'flex') {
+                picker.style.display = 'none';
+            } else {
+                renderEmojiGrid();
+                picker.style.display = 'flex';
+            }
+        }
+
+        function renderEmojiGrid() {
+            const grid = document.getElementById('emoji-grid');
+            if (!grid || grid.children.length > 0) return;
+            grid.innerHTML = '';
+            
+            const addedCodes = new Set();
+            msnEmojis.forEach(item => {
+                if (addedCodes.has(item.code)) return;
+                addedCodes.add(item.code);
+                
+                const div = document.createElement('div');
+                div.className = 'emoji-item';
+                div.innerHTML = `<img src="emoticons/${item.file}" style="width: 19px; height: 19px; object-fit: contain;">`;
+                div.title = `${item.title} (${item.code})`;
+                div.onclick = (event) => {
+                    event.stopPropagation();
+                    insertEmojiIntoInput(item.code);
+                };
+                grid.appendChild(div);
+            });
+        }
+
+        function insertEmojiIntoInput(code) {
+            const input = document.getElementById('message-input');
+            if (!input) return;
+            const start = input.selectionStart || input.value.length;
+            const end = input.selectionEnd || input.value.length;
+            const text = input.value;
+            input.value = text.substring(0, start) + ' ' + code + ' ' + text.substring(end);
+            input.focus();
+            input.setSelectionRange(start + code.length + 2, start + code.length + 2);
+        }
+
+        function replaceMsnEmojis(text) {
+            if (!text) return '';
+            let result = text;
+            msnEmojis.forEach(item => {
+                const escapeRegex = (s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                let pattern = escapeRegex(item.code);
+                if (item.alt) {
+                    pattern += '|' + escapeRegex(item.alt);
+                }
+                const regex = new RegExp(pattern, 'g');
+                result = result.replace(regex, `<img src="emoticons/${item.file}" class="msn-emoji-img" title="${item.code}" alt="${item.code}" style="vertical-align: middle; height: 19px; margin: 0 2px;">`);
+            });
+            return result;
+        }
+
+        document.addEventListener('click', (e) => {
+            const picker = document.getElementById('emoji-picker');
+            if (picker && picker.style.display === 'flex') {
+                if (!picker.contains(e.target) && !e.target.closest('button[onclick*="toggleEmojiPicker"]')) {
+                    picker.style.display = 'none';
+                }
+            }
+        });
+
+        let rightPanelOpen = localStorage.getItem('p2p_right_panel_open') !== 'false';
+        let activeRightTab = 'pins';
+
+        function initResizablePanels() {
+            const resizer = document.getElementById('resizer-splitter');
+            const sidebar = document.getElementById('sidebar-panel');
+            if (!resizer || !sidebar) return;
+
+            let isDragging = false;
+
+            const savedWidth = localStorage.getItem('p2p_sidebar_width');
+            if (savedWidth) {
+                sidebar.style.width = savedWidth + 'px';
+            }
+
+            resizer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                resizer.classList.add('is-resizing');
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const containerLeft = sidebar.getBoundingClientRect().left;
+                let newWidth = e.clientX - containerLeft;
+                if (newWidth < 180) newWidth = 180;
+                if (newWidth > window.innerWidth - 300) newWidth = window.innerWidth - 300;
+                sidebar.style.width = newWidth + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    resizer.classList.remove('is-resizing');
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                    if (sidebar.style.width) {
+                        localStorage.setItem('p2p_sidebar_width', parseInt(sidebar.style.width));
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        function init() {
+            loadTheme();
+            loadAppTitle();
+            loadData();
+            loadKnownUsers();
+            loadDeletedTopics();
+            loadHostedFiles();
+            initResizablePanels();
+            
+            const savedUsername = localStorage.getItem('p2p_username');
+            const savedPeerId = localStorage.getItem('p2p_peer_id') || '1';
+            
+            document.getElementById('peerid-input').value = savedPeerId;
+            
+            if (savedUsername) {
+                document.getElementById('username-input').value = savedUsername;
+                setUsername();
+            }
+        }
+
+        function sendNudge() {
+            if (!currentTopic) {
+                showNotification('Kérlek válassz egy topikot a rengés küldéséhez!', 'error');
+                return;
+            }
+
+            const message = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                content: '⚡ RENGÉST KÜLDÖTT! (MSN Nudge)',
+                username: username,
+                timestamp: new Date().toISOString(),
+                isNudge: true
+            };
+
+            if (!data.messages[currentTopic]) {
+                data.messages[currentTopic] = [];
+            }
+            data.messages[currentTopic].push(message);
+            saveData();
+
+            broadcast({
+                type: 'new_message',
+                topicId: currentTopic,
+                message: message
+            });
+
+            renderMessages();
+            triggerNudgeEffect(username);
+        }
+
+        function triggerNudgeEffect(senderName) {
+            playMsnSound('nudge');
+
+            const appEl = document.getElementById('app') || document.body;
+            appEl.classList.remove('nudge-anim');
+            void appEl.offsetWidth;
+            appEl.classList.add('nudge-anim');
+            setTimeout(() => {
+                appEl.classList.remove('nudge-anim');
+            }, 650);
+
+            showNotification(`⚡ ${senderName} RENGÉST KÜLDÖTT! (MSN Nudge)`, 'error');
+        }
+
+        // Pinned Messages & Media Files Modal functions
+        function openPinsMediaModal() {
+            renderRightPanel();
+            const modal = document.getElementById('pins-media-modal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closePinsMediaModal() {
+            const modal = document.getElementById('pins-media-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function jumpToMessageFromModal(msgId) {
+            closePinsMediaModal();
+            jumpToMessage(msgId);
+        }
+
+        function switchRightTab(tabName) {
+            activeRightTab = tabName;
+            const btnPins = document.getElementById('tab-btn-pins');
+            const btnMedia = document.getElementById('tab-btn-media');
+            const contentPins = document.getElementById('right-tab-content-pins');
+            const contentMedia = document.getElementById('right-tab-content-media');
+
+            if (tabName === 'pins') {
+                if (btnPins) btnPins.classList.add('active');
+                if (btnMedia) btnMedia.classList.remove('active');
+                if (contentPins) contentPins.style.display = 'flex';
+                if (contentMedia) contentMedia.style.display = 'none';
+            } else {
+                if (btnPins) btnPins.classList.remove('active');
+                if (btnMedia) btnMedia.classList.add('active');
+                if (contentPins) contentPins.style.display = 'none';
+                if (contentMedia) contentMedia.style.display = 'flex';
+            }
+            renderRightPanel();
+        }
+
+        function togglePinMessage(msgId) {
+            if (!currentTopic || !data.messages[currentTopic]) return;
+            const msg = data.messages[currentTopic].find(m => m.id === msgId);
+            if (!msg) return;
+
+            msg.pinned = !msg.pinned;
+            saveData();
+
+            broadcast({
+                type: 'toggle_pin',
+                topicId: currentTopic,
+                messageId: msgId,
+                pinned: msg.pinned
+            });
+
+            if (msg.pinned) {
+                showNotification('📌 Üzenet rögzítve!');
+            } else {
+                showNotification('📌 Üzenet rögzítése feloldva.');
+            }
+
+            renderMessages();
+        }
+
+        function renderRightPanel() {
+            if (!currentTopic || !data.messages[currentTopic]) {
+                const pinsCount = document.getElementById('pins-count');
+                const mediaCount = document.getElementById('media-count');
+                if (pinsCount) pinsCount.textContent = '0';
+                if (mediaCount) mediaCount.textContent = '0';
+                return;
+            }
+
+            const messages = data.messages[currentTopic];
+            const pinnedMsgs = messages.filter(m => m.pinned);
+            const mediaMsgs = messages.filter(m => m.attachment || (m.content && /(https?:\/\/[^\s<]+)/i.test(m.content)));
+
+            const pinsCountEl = document.getElementById('pins-count');
+            const mediaCountEl = document.getElementById('media-count');
+            if (pinsCountEl) pinsCountEl.textContent = pinnedMsgs.length.toString();
+            if (mediaCountEl) mediaCountEl.textContent = mediaMsgs.length.toString();
+
+            // 1. Render Pinned Messages Tab
+            const pinsContainer = document.getElementById('right-tab-content-pins');
+            if (pinsContainer) {
+                if (pinnedMsgs.length === 0) {
+                    pinsContainer.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek rögzített üzenetek ebben a topikban.<br><br><i>Kattints bármelyik üzenet melletti 📌 ikonra a kitűzéshez!</i></div>';
+                } else {
+                    pinsContainer.innerHTML = '';
+                    pinnedMsgs.forEach(msg => {
+                        const card = document.createElement('div');
+                        card.className = 'pinned-card';
+                        
+                        const dateObj = new Date(msg.timestamp);
+                        const timeStr = dateObj.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
+                        const shortText = msg.content ? msg.content.substring(0, 100) : (msg.attachment ? `📎 ${msg.attachment.name}` : '');
+
+                        card.onclick = () => jumpToMessageFromModal(msg.id);
+                        card.innerHTML = `
+                            <div class="pinned-meta">
+                                <span><strong>@${escapeHtml(msg.username)}</strong> • ${timeStr}</span>
+                                <button class="unpin-btn" onclick="event.stopPropagation(); togglePinMessage('${msg.id}')" title="Üzenet unpinelése">✖ Unpin</button>
+                            </div>
+                            <div>${escapeHtml(shortText)}${msg.content && msg.content.length > 100 ? '...' : ''}</div>
+                        `;
+                        pinsContainer.appendChild(card);
+                    });
+                }
+            }
+
+            // 2. Render Media & Files Tab
+            const mediaContainer = document.getElementById('right-tab-content-media');
+            if (mediaContainer) {
+                if (mediaMsgs.length === 0) {
+                    mediaContainer.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 13px;">Még nincsenek csatolt fájlok vagy hivatkozások ebben a topikban.</div>';
+                } else {
+                    mediaContainer.innerHTML = '';
+                    mediaMsgs.forEach(msg => {
+                        const card = document.createElement('div');
+                        card.className = 'media-card';
+                        
+                        const dateObj = new Date(msg.timestamp);
+                        const timeStr = dateObj.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
+                        
+                        let mediaContentHtml = '';
+                        if (msg.attachment) {
+                            const fileId = msg.attachment.fileId;
+                            const fileObj = fileId ? hostedFiles[fileId] : (msg.attachment.data ? msg.attachment : null);
+                            
+                            if (fileObj && fileObj.type && fileObj.type.startsWith('image/')) {
+                                mediaContentHtml = `<img src="${fileObj.data}" alt="${escapeHtml(fileObj.name)}" onclick="jumpToMessageFromModal('${msg.id}')" title="Ugrás az üzenethez">`;
+                            } else {
+                                mediaContentHtml = `<div>📎 <strong>${escapeHtml(msg.attachment.name)}</strong> (${formatFileSize(msg.attachment.size)})</div>`;
+                            }
+                        } else if (msg.content) {
+                            const match = msg.content.match(/(https?:\/\/[^\s<]+)/i);
+                            if (match) {
+                                mediaContentHtml = `<div>🔗 <a href="${match[0]}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: underline;">${escapeHtml(match[0].substring(0, 45))}${match[0].length > 45 ? '...' : ''}</a></div>`;
+                            }
+                        }
+
+                        card.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; opacity: 0.75;">
+                                <span><strong>@${escapeHtml(msg.username)}</strong> • ${timeStr}</span>
+                                <button onclick="jumpToMessageFromModal('${msg.id}')" style="background: transparent; border: none; cursor: pointer; color: var(--primary-color); font-weight: bold;">Ugrás 🎯</button>
+                            </div>
+                            ${mediaContentHtml}
+                        `;
+                        mediaContainer.appendChild(card);
+                    });
+                }
+            }
+        }
+
+        function getComputedColorHex(propName, fallbackHex = '#667eea') {
+            let val = getComputedStyle(document.documentElement).getPropertyValue(propName).trim();
+            if (!val) val = fallbackHex;
+            return colorToHex(val, fallbackHex);
+        }
+
+        function colorToHex(colorStr, fallbackHex = '#667eea') {
+            if (!colorStr) return fallbackHex;
+            colorStr = colorStr.trim();
+            
+            if (colorStr.startsWith('#')) {
+                if (colorStr.length === 4) {
+                    return '#' + colorStr[1] + colorStr[1] + colorStr[2] + colorStr[2] + colorStr[3] + colorStr[3];
+                }
+                if (colorStr.length === 7) return colorStr;
+            }
+            
+            const match = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+            if (match) {
+                const r = parseInt(match[1]).toString(16).padStart(2, '0');
+                const g = parseInt(match[2]).toString(16).padStart(2, '0');
+                const b = parseInt(match[3]).toString(16).padStart(2, '0');
+                return `#${r}${g}${b}`;
+            }
+
+            const gradMatch = colorStr.match(/#[0-9a-fA-F]{3,6}/);
+            if (gradMatch) {
+                return colorToHex(gradMatch[0], fallbackHex);
+            }
+            
+            return fallbackHex;
+        }
+        function loadHostedFiles() {
+            const saved = localStorage.getItem('p2p_hosted_files');
+            if (saved) {
+                try {
+                    hostedFiles = JSON.parse(saved);
+                } catch (e) {
+                    hostedFiles = {};
+                }
+            }
+        }
+
+        function saveHostedFiles() {
+            try {
+                localStorage.setItem('p2p_hosted_files', JSON.stringify(hostedFiles));
+            } catch (e) {
+                console.warn('Storage quota exceeded for local files cache:', e);
+            }
+        }
+
+        // Theme & Title management
+        function openThemeModal() {
+            const modal = document.getElementById('theme-modal');
+            if (modal) {
+                const fullSaved = localStorage.getItem('p2p_full_theme');
+                if (fullSaved) {
+                    try {
+                        const t = JSON.parse(fullSaved);
+                        if (t.primary) document.getElementById('picker-primary').value = t.primary;
+                        if (t.bg) document.getElementById('picker-bg').value = t.bg;
+                        if (t.card) document.getElementById('picker-card').value = t.card;
+                        if (t.text) document.getElementById('picker-text').value = t.text;
+                        if (t.ownMsg) document.getElementById('picker-own-msg').value = t.ownMsg;
+                        if (t.ownMsgText) document.getElementById('picker-own-msg-text').value = t.ownMsgText;
+                        if (t.otherMsg) document.getElementById('picker-other-msg').value = t.otherMsg;
+                        if (t.otherMsgText) document.getElementById('picker-other-msg-text').value = t.otherMsgText;
+                    } catch(e) {}
+                }
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeThemeModal() {
+            const modal = document.getElementById('theme-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function applyCustomThemeFromModal() {
+            const primary = document.getElementById('picker-primary').value;
+            const bg = document.getElementById('picker-bg').value;
+            const card = document.getElementById('picker-card').value;
+            const text = document.getElementById('picker-text').value;
+            const ownMsg = document.getElementById('picker-own-msg').value;
+            const ownMsgText = document.getElementById('picker-own-msg-text').value;
+            const otherMsg = document.getElementById('picker-other-msg').value;
+            const otherMsgText = document.getElementById('picker-other-msg-text').value;
+
+            const themeObj = { primary, bg, card, text, ownMsg, ownMsgText, otherMsg, otherMsgText };
+            setFullCustomTheme(themeObj);
+        }
+
+        function setFullCustomTheme(themeObj) {
+            document.body.className = 'theme-custom';
+
+            document.documentElement.style.setProperty('--primary-color', themeObj.primary);
+            document.documentElement.style.setProperty('--primary-hover', adjustColor(themeObj.primary, -20));
+            document.documentElement.style.setProperty('--bg-gradient', `linear-gradient(135deg, ${themeObj.primary} 0%, ${themeObj.bg} 100%)`);
+            document.documentElement.style.setProperty('--card-bg', themeObj.card);
+            document.documentElement.style.setProperty('--text-color', themeObj.text);
+            document.documentElement.style.setProperty('--input-bg', themeObj.card);
+            document.documentElement.style.setProperty('--input-border', adjustColor(themeObj.card, -15));
+            document.documentElement.style.setProperty('--peer-info-bg', adjustColor(themeObj.card, -8));
+            document.documentElement.style.setProperty('--own-msg-bg', themeObj.ownMsg);
+            document.documentElement.style.setProperty('--own-msg-text', themeObj.ownMsgText);
+            document.documentElement.style.setProperty('--other-msg-bg', themeObj.otherMsg);
+            document.documentElement.style.setProperty('--other-msg-text', themeObj.otherMsgText);
+
+            localStorage.setItem('p2p_theme', 'custom');
+            localStorage.setItem('p2p_full_theme', JSON.stringify(themeObj));
+
+            const select = document.getElementById('theme-select');
+            if (select) select.value = 'custom';
+        }
+
+        function resetThemeDefaults() {
+            localStorage.removeItem('p2p_full_theme');
+            localStorage.removeItem('p2p_custom_color');
+            document.documentElement.style.removeProperty('--primary-color');
+            document.documentElement.style.removeProperty('--primary-hover');
+            document.documentElement.style.removeProperty('--bg-gradient');
+            document.documentElement.style.removeProperty('--card-bg');
+            document.documentElement.style.removeProperty('--text-color');
+            document.documentElement.style.removeProperty('--input-bg');
+            document.documentElement.style.removeProperty('--input-border');
+            document.documentElement.style.removeProperty('--peer-info-bg');
+            document.documentElement.style.removeProperty('--own-msg-bg');
+            document.documentElement.style.removeProperty('--own-msg-text');
+            document.documentElement.style.removeProperty('--other-msg-bg');
+            document.documentElement.style.removeProperty('--other-msg-text');
+
+            changeTheme('default');
+            closeThemeModal();
+            showNotification('Visszaállítva az alapértelmezett színekre!');
+        }
+
+        function changeTheme(themeName) {
+            if (themeName === 'custom') {
+                openThemeModal();
+                return;
+            }
+            // Reset custom CSS variables if returning to preset theme
+            document.documentElement.style.removeProperty('--primary-color');
+            document.documentElement.style.removeProperty('--primary-hover');
+            document.documentElement.style.removeProperty('--bg-gradient');
+            document.documentElement.style.removeProperty('--card-bg');
+            document.documentElement.style.removeProperty('--text-color');
+            document.documentElement.style.removeProperty('--input-bg');
+            document.documentElement.style.removeProperty('--input-border');
+            document.documentElement.style.removeProperty('--peer-info-bg');
+            document.documentElement.style.removeProperty('--own-msg-bg');
+            document.documentElement.style.removeProperty('--own-msg-text');
+            document.documentElement.style.removeProperty('--other-msg-bg');
+            document.documentElement.style.removeProperty('--other-msg-text');
+
+            document.body.className = themeName === 'default' ? '' : 'theme-' + themeName;
+            localStorage.setItem('p2p_theme', themeName);
+        }
+
+        function setCustomColor(hexColor) {
+            document.body.className = 'theme-custom';
+            document.documentElement.style.setProperty('--primary-color', hexColor);
+            
+            const hoverColor = adjustColor(hexColor, -20);
+            document.documentElement.style.setProperty('--primary-hover', hoverColor);
+            
+            const bgGrad = `linear-gradient(135deg, ${hexColor} 0%, ${adjustColor(hexColor, -40)} 100%)`;
+            document.documentElement.style.setProperty('--bg-gradient', bgGrad);
+            
+            localStorage.setItem('p2p_theme', 'custom');
+            localStorage.setItem('p2p_custom_color', hexColor);
+            
+            const select = document.getElementById('theme-select');
+            if (select) select.value = 'custom';
+            const picker = document.getElementById('custom-color-picker');
+            if (picker) picker.value = hexColor;
+        }
+
+        function adjustColor(color, percent) {
+            let num = parseInt(color.replace("#",""), 16),
+                amt = Math.round(2.55 * percent),
+                R = (num >> 16) + amt,
+                B = (num >> 8 & 0x00FF) + amt,
+                G = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('p2p_theme') || 'default';
+            if (savedTheme === 'custom') {
+                const fullSaved = localStorage.getItem('p2p_full_theme');
+                if (fullSaved) {
+                    try {
+                        setFullCustomTheme(JSON.parse(fullSaved));
+                    } catch(e) {
+                        const savedColor = localStorage.getItem('p2p_custom_color') || '#667eea';
+                        setCustomColor(savedColor);
+                    }
+                } else {
+                    const savedColor = localStorage.getItem('p2p_custom_color') || '#667eea';
+                    setCustomColor(savedColor);
+                }
+            } else {
+                changeTheme(savedTheme);
+                const select = document.getElementById('theme-select');
+                if (select) select.value = savedTheme;
+            }
+        }
+
+        function editAppTitle() {
+            const currentTitle = localStorage.getItem('p2p_app_title') || '🌐 P2P Reddit';
+            const newTitle = prompt('Kérlek add meg a weboldal új címét:', currentTitle);
+            if (newTitle !== null && newTitle.trim()) {
+                const titleStr = newTitle.trim();
+                localStorage.setItem('p2p_app_title', titleStr);
+                applyAppTitle(titleStr);
+                showNotification('Cím frissítve!');
+            }
+        }
+
+        function applyAppTitle(titleStr) {
+            const display = document.getElementById('app-title-display');
+            if (display) display.textContent = titleStr;
+            document.title = titleStr + ' - Szerver Nélküli Chat';
+        }
+
+        function loadAppTitle() {
+            const savedTitle = localStorage.getItem('p2p_app_title') || '🌐 P2P Reddit';
+            applyAppTitle(savedTitle);
+        }
+
+        function setUsername() {
+            const usernameInput = document.getElementById('username-input');
+            const peerIdInput = document.getElementById('peerid-input');
+            
+            username = usernameInput.value.trim();
+            let desiredPeerId = peerIdInput.value.trim();
+            
+            if (!username) {
+                showNotification('Kérlek adj meg egy felhasználónevet!', 'error');
+                return;
+            }
+            if (!desiredPeerId) {
+                desiredPeerId = '1';
+            }
+
+            localStorage.setItem('p2p_username', username);
+            localStorage.setItem('p2p_peer_id', desiredPeerId);
+            
+            document.getElementById('username-modal').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('current-user').textContent = `👤 ${username}`;
+            
+            initPeer();
+            renderTopics();
+        }
+
+        // PeerJS initialization
+        function initPeer() {
+            let peerId = localStorage.getItem('p2p_peer_id');
+            if (!peerId) {
+                peerId = '1';
+                localStorage.setItem('p2p_peer_id', peerId);
+            }
+            
+            document.getElementById('own-peer-id').value = peerId;
+
+            if (peer) {
+                try { peer.destroy(); } catch(e) {}
+            }
+
+            peer = new Peer(peerId);
+
+            peer.on('open', (id) => {
+                document.getElementById('own-peer-id').value = id;
+                document.getElementById('connection-status').textContent = 'Kapcsolódva (' + id + ')';
+                document.getElementById('connection-status').className = 'connection-status connected';
+                showNotification('Sikeresen kapcsolódva! ID: ' + id);
+                
+                // Add self to known users
+                knownUsers[id] = {
+                    username: username,
+                    lastSeen: Date.now()
+                };
+                saveKnownUsers();
+                renderUserList();
+                
+                // Auto-reconnect to known peers
+                autoReconnect();
+                
+                // Broadcast presence to all connections
+                broadcastPresence();
+            });
+
+            peer.on('connection', (conn) => {
+                handleConnection(conn);
+            });
+
+            peer.on('call', (incomingCall) => {
+                const metadata = incomingCall.metadata || {};
+                if (metadata.type === 'screen-share') {
+                    incomingCall.answer();
+                    incomingCall.on('stream', (remoteStream) => {
+                        lastRemoteStream = remoteStream;
+                        const callerId = incomingCall.peer;
+                        const callerName = knownUsers[callerId] ? knownUsers[callerId].username : callerId;
+                        showDockedStream(remoteStream, `🔴 LIVE Stream @${callerName}`);
+                        showNotification(`🖥️ Csatlakozva @${callerName} streamjéhez!`);
+                    });
+                } else {
+                    activeMediaCall = incomingCall;
+                    playMsnSound('phone');
+                    showIncomingCallModal(incomingCall);
+                }
+            });
+
+            peer.on('error', (err) => {
+                console.error('Peer error:', err);
+                if (err.type === 'unavailable-id') {
+                    showNotification(`A "${peerId}" Peer ID már foglalt a hálózaton! Válassz egy másikat.`, 'error');
+                } else {
+                    showNotification('Hiba történt: ' + err.type, 'error');
+                }
+            });
+        }
+
+        function changePeerId() {
+            const input = document.getElementById('own-peer-id');
+            const newId = input.value.trim();
+            if (!newId) {
+                showNotification('Adj meg egy érvényes Peer ID-t!', 'error');
+                return;
+            }
+            if (peer && newId === peer.id) {
+                showNotification('Már ez a Peer ID használatban van!', 'error');
+                return;
+            }
+            localStorage.setItem('p2p_peer_id', newId);
+            showNotification('Peer ID frissítve! Újracsatlakozás...');
+            initPeer();
+        }
+
+        function handleConnection(conn) {
+            connections.push(conn);
+            updatePeerCount();
+
+            conn.on('open', () => {
+                showNotification('Új peer csatlakozott!');
+                playMsnSound('online');
+                // Send current data to new peer
+                conn.send({ type: 'sync', data: data });
+                // Send presence info
+                conn.send({ 
+                    type: 'presence', 
+                    peerId: peer.id, 
+                    username: username,
+                    knownUsers: knownUsers
+                });
+                // Request presence from new peer
+                conn.send({ type: 'presence_request' });
+            });
+
+            conn.on('data', (received) => {
+                handleData(received, conn);
+            });
+
+            conn.on('close', () => {
+                connections = connections.filter(c => c !== conn);
+                if (knownUsers[conn.peer]) {
+                    knownUsers[conn.peer].lastSeen = 0;
+                }
+                saveKnownUsers();
+                renderUserList();
+                showNotification(`@${knownUsers[conn.peer]?.username || conn.peer} lekapcsolódott (Offline)`);
+            });
+        }
+
+        function connectToPeer() {
+            const peerId = document.getElementById('connect-peer-id').value.trim();
+            if (!peerId) {
+                showNotification('Kérlek adj meg egy Peer ID-t!', 'error');
+                return;
+            }
+
+            if (peer && peerId === peer.id) {
+                showNotification('Nem csatlakozhatsz saját magadhoz!', 'error');
+                return;
+            }
+
+            const conn = peer.connect(peerId);
+            handleConnection(conn);
+            document.getElementById('connect-peer-id').value = '';
+        }
+
+        function handleData(received, conn) {
+            switch (received.type) {
+                case 'sync':
+                    // Merge received data with local data
+                    mergeData(received.data);
+                    renderTopics();
+                    if (currentTopic) {
+                        renderMessages();
+                    }
+                    break;
+                case 'new_topic':
+                    if (deletedTopicIds.includes(received.topicId)) break;
+                    if (!data.topics[received.topicId]) {
+                        data.topics[received.topicId] = received.topic;
+                        data.messages[received.topicId] = [];
+                        saveData();
+                        renderTopics();
+                        playMsnSound('alert');
+                    }
+                    break;
+                case 'new_message':
+                    if (deletedTopicIds.includes(received.topicId)) break;
+                    if (!data.messages[received.topicId]) {
+                        data.messages[received.topicId] = [];
+                    }
+                    data.messages[received.topicId].push(received.message);
+                    saveData();
+                    if (currentTopic === received.topicId) {
+                        renderMessages();
+                        renderRightPanel();
+                    }
+                    if (received.message.isNudge) {
+                        triggerNudgeEffect(received.message.username);
+                    } else if (received.message.username !== username) {
+                        if (received.message.attachment) {
+                            playMsnSound('email');
+                        } else {
+                            playMsnSound('message');
+                        }
+                    }
+                    break;
+                case 'presence':
+                    if (received.peerId && received.username) {
+                        knownUsers[received.peerId] = {
+                            username: received.username,
+                            lastSeen: Date.now(),
+                            isStreaming: !!received.isStreaming
+                        };
+                    }
+                    if (received.knownUsers) {
+                        for (const pid in received.knownUsers) {
+                            if (!knownUsers[pid] || knownUsers[pid].lastSeen < received.knownUsers[pid].lastSeen) {
+                                knownUsers[pid] = received.knownUsers[pid];
+                            }
+                        }
+                    }
+                    saveKnownUsers();
+                    renderUserList();
+                    break;
+                case 'presence_request':
+                    conn.send({ 
+                        type: 'presence', 
+                        peerId: peer ? peer.id : '', 
+                        username: username,
+                        knownUsers: knownUsers
+                    });
+                    break;
+                case 'sync_request':
+                    conn.send({ type: 'sync', data: data });
+                    break;
+                case 'request_file_data':
+                    if (received.fileId && hostedFiles[received.fileId]) {
+                        conn.send({
+                            type: 'response_file_data',
+                            fileId: received.fileId,
+                            fileObj: hostedFiles[received.fileId]
+                        });
+                    }
+                    break;
+                case 'response_file_data':
+                    if (received.fileObj) {
+                        hostedFiles[received.fileId] = received.fileObj;
+                        saveHostedFiles();
+                        renderMessages();
+                        playMsnSound('email');
+                        triggerBrowserDownload(received.fileObj);
+                    }
+                    break;
+            }
+        }
+
+        function mergeData(receivedData) {
+            // Merge topics
+            for (const topicId in receivedData.topics) {
+                if (deletedTopicIds.includes(topicId)) continue;
+                if (!data.topics[topicId]) {
+                    data.topics[topicId] = receivedData.topics[topicId];
+                }
+            }
+            
+            // Merge messages
+            for (const topicId in receivedData.messages) {
+                if (deletedTopicIds.includes(topicId)) continue;
+                if (!data.messages[topicId]) {
+                    data.messages[topicId] = receivedData.messages[topicId];
+                } else {
+                    // Add only new messages
+                    const existingIds = new Set(data.messages[topicId].map(m => m.id));
+                    receivedData.messages[topicId].forEach(msg => {
+                        if (!existingIds.has(msg.id)) {
+                            data.messages[topicId].push(msg);
+                        }
+                    });
+                }
+            }
+            
+            saveData();
+        }
+
+        function broadcast(data) {
+            connections.forEach(conn => {
+                if (conn.open) {
+                    conn.send(data);
+                }
+            });
+        }
+
+        function broadcastPresence() {
+            broadcast({ 
+                type: 'presence', 
+                peerId: peer.id, 
+                username: username,
+                knownUsers: knownUsers
+            });
+        }
+
+        function autoReconnect() {
+            // Reconnect to known peers (except self)
+            for (const peerId in knownUsers) {
+                if (peerId !== peer.id) {
+                    const isConnected = connections.some(c => c.peer === peerId);
+                    if (!isConnected) {
+                        // Try to connect with a small delay to avoid overwhelming
+                        setTimeout(() => {
+                            const conn = peer.connect(peerId);
+                            handleConnection(conn);
+                        }, Math.random() * 1000);
+                    }
+                }
+            }
+        }
+
+        function manualRefresh() {
+            showNotification('Újracsatlakozás a ismert felhasználókhoz...');
+            autoReconnect();
+            broadcastPresence();
+        }
+
+        function saveKnownUsers() {
+            localStorage.setItem('p2p_known_users', JSON.stringify(knownUsers));
+        }
+
+        function loadKnownUsers() {
+            const saved = localStorage.getItem('p2p_known_users');
+            if (saved) {
+                try {
+                    knownUsers = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading known users:', e);
+                    knownUsers = {};
+                }
+            }
+        }
+
+        function updatePeerCount() {
+            // Peer count is now shown in user list
+        }
+
+        const CURRENT_APP_VERSION = "3.2";
+        let detectedNewVersion = null;
+
+        function checkAppVersion() {
+            if (!window.location.protocol.startsWith('http')) return;
+
+            fetch('version.json?t=' + Date.now())
+                .then(res => {
+                    if (res.ok) return res.json();
+                    throw new Error('Version fetch failed');
+                })
+                .then(data => {
+                    if (data && data.version && data.version !== CURRENT_APP_VERSION) {
+                        const dismissedVer = sessionStorage.getItem('dismissed_update_version');
+                        if (dismissedVer !== data.version) {
+                            detectedNewVersion = data.version;
+                            showVersionUpdateModal(data.version);
+                        }
+                    }
+                })
+                .catch(e => {
+                    // Ignore network errors
+                });
+        }
+
+        function showVersionUpdateModal(newVer) {
+            const modal = document.getElementById('version-update-modal');
+            if (modal && modal.style.display !== 'flex') {
+                playMsnSound('alert');
+                modal.style.display = 'flex';
+                showNotification(`🚀 Új verzió érhető el (v${newVer})! Nyomj F5-öt a frissítéshez.`, 'error');
+            }
+        }
+
+        function closeVersionModal() {
+            const modal = document.getElementById('version-update-modal');
+            if (modal) modal.style.display = 'none';
+            if (detectedNewVersion) {
+                sessionStorage.setItem('dismissed_update_version', detectedNewVersion);
+            }
+        }
+
+        setInterval(checkAppVersion, 15000);
+        setTimeout(checkAppVersion, 4000);
+
+        let activeMediaCall = null;
+        let localAudioStream = null;
+        let callTimerInterval = null;
+        let callStartTime = 0;
+        let isMicMuted = false;
+
+        setInterval(() => {
+            if (peer && peer.open) {
+                knownUsers[peer.id] = { username: username, lastSeen: Date.now() };
+                broadcastPresence();
+            }
+            renderUserList();
+        }, 5000);
+
+        function renderUserList() {
+            const container = document.getElementById('user-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const userEntries = Object.entries(knownUsers);
+            const now = Date.now();
+            const onlinePeers = [];
+
+            userEntries.forEach(([peerId, userInfo]) => {
+                const isOwn = peer ? (peerId === peer.id) : false;
+                const isConnected = connections.some(c => c.peer === peerId);
+                const isRecent = (now - (userInfo.lastSeen || 0) < 12000);
+                const isOnline = isOwn || (isConnected && isRecent);
+
+                if (isOnline) {
+                    onlinePeers.push({ peerId, userInfo, isOwn, isConnected });
+                }
+            });
+
+            if (onlinePeers.length === 0) {
+                container.innerHTML = '<div class="empty-state" style="padding: 0.8rem; font-size: 13px;">Nincs online felhasználó</div>';
+                return;
+            }
+
+            onlinePeers.forEach(({ peerId, userInfo, isOwn, isConnected }) => {
+                const isUserStreaming = !!userInfo.isStreaming;
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.innerHTML = `
+                    <div class="user-name">
+                        <strong>@${escapeHtml(userInfo.username)}</strong> 
+                        <span style="font-size: 11px; opacity: 0.6;">(${escapeHtml(peerId)})</span>
+                        ${isUserStreaming ? `<span style="background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 4px; display: inline-block;">🔴 LIVE STREAM</span>` : ''}
+                    </div>
+                    <span class="user-status online">Online</span>
+                    <div style="display: flex; gap: 4px; align-items: center;">
+                        ${isUserStreaming && !isOwn ? `<button class="btn" onclick="watchUserStream('${peerId}')" style="background: #6366f1; color: white; padding: 3px 8px; font-size: 11px; font-weight: bold;" title="Kattints a stream élő nézéséhez">▶️ Nézés</button>` : ''}
+                        ${!isOwn && isConnected && !isUserStreaming ? `<button class="btn btn-primary" onclick="startVoiceCall('${peerId}')" style="padding: 3px 8px; font-size: 11px;" title="Hanghívás indítása">🎙️ Hívás</button>` : ''}
+                        <button class="connect-btn ${isOwn ? 'own' : isConnected ? 'connected' : ''}" 
+                                onclick="connectToPeerById('${peerId}')"
+                                ${isOwn || isConnected ? 'disabled' : ''}>
+                            ${isOwn ? 'Te' : 'Kapcsolódva'}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function watchUserStream(targetPeerId) {
+            activeStreamCallerId = targetPeerId;
+            acceptStreamInvite();
+        }
+
+        // Voice Call Functions
+        function startVoiceCall(targetPeerId) {
+            if (!targetPeerId) {
+                if (!connections || connections.length === 0) {
+                    showNotification('Nincs csatlakozott online partner a hanghíváshoz!', 'error');
+                    return;
+                }
+                targetPeerId = connections[0].peer;
+            }
+
+            const peerInfo = knownUsers[targetPeerId];
+            const peerName = peerInfo ? peerInfo.username : targetPeerId;
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showNotification('A böngésződ nem támogatja a mikrofonos hanghívást (getUserMedia)!', 'error');
+                return;
+            }
+
+            showNotification(`🎙️ Hanghívás indítása: @${peerName}...`);
+            playMsnSound('phone');
+
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                .then(stream => {
+                    localAudioStream = stream;
+                    const mediaCall = peer.call(targetPeerId, localAudioStream);
+                    activeMediaCall = mediaCall;
+                    setupMediaCallEvents(mediaCall, peerName);
+                })
+                .catch(err => {
+                    console.error('Microphone access error:', err);
+                    showNotification('Nem sikerült hozzáférni a mikrofonhoz! Engedélyezd a böngészőben.', 'error');
+                });
+        }
+
+        function showIncomingCallModal(incomingCall) {
+            const callerId = incomingCall.peer;
+            const callerInfo = knownUsers[callerId];
+            const callerName = callerInfo ? callerInfo.username : callerId;
+
+            const modal = document.getElementById('voice-call-modal');
+            const nameEl = document.getElementById('call-caller-name');
+            if (nameEl) nameEl.textContent = `@${callerName} (${callerId}) hanghívást indított téged!`;
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function acceptVoiceCall() {
+            const modal = document.getElementById('voice-call-modal');
+            if (modal) modal.style.display = 'none';
+
+            if (!activeMediaCall) return;
+
+            const callerId = activeMediaCall.peer;
+            const callerInfo = knownUsers[callerId];
+            const callerName = callerInfo ? callerInfo.username : callerId;
+
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                .then(stream => {
+                    localAudioStream = stream;
+                    activeMediaCall.answer(localAudioStream);
+                    setupMediaCallEvents(activeMediaCall, callerName);
+                })
+                .catch(err => {
+                    console.error('Microphone error on accept:', err);
+                    showNotification('Mikrofon engedélyezése szükséges a hívás fogadásához!', 'error');
+                });
+        }
+
+        function rejectVoiceCall() {
+            const modal = document.getElementById('voice-call-modal');
+            if (modal) modal.style.display = 'none';
+            if (activeMediaCall) {
+                try { activeMediaCall.close(); } catch(e) {}
+                activeMediaCall = null;
+            }
+            showNotification('Hanghívás elutasítva.');
+        }
+
+        function setupMediaCallEvents(mediaCall, remoteUsername) {
+            showActiveCallBar(remoteUsername);
+
+            mediaCall.on('stream', (remoteStream) => {
+                const audioPlayer = document.getElementById('remote-audio-player');
+                if (audioPlayer) {
+                    audioPlayer.srcObject = remoteStream;
+                    audioPlayer.play().catch(e => console.warn('Remote audio play error:', e));
+                }
+            });
+
+            mediaCall.on('close', () => {
+                endVoiceCallCleanup();
+                showNotification('Hanghívás befejeződött.');
+            });
+
+            mediaCall.on('error', (err) => {
+                console.error('Voice call error:', err);
+                endVoiceCallCleanup();
+                showNotification('Hiba történt a hanghívás során.', 'error');
+            });
+        }
+
+        let selectedMicDeviceId = '';
+        let localScreenStream = null;
+        let activeScreenCall = null;
+
+        function updateMicrophoneList() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+            navigator.mediaDevices.enumerateDevices()
+                .then(devices => {
+                    const micSelects = [
+                        document.getElementById('mic-input-select'),
+                        document.getElementById('sidebar-mic-select')
+                    ];
+                    
+                    const audioInputs = devices.filter(d => d.kind === 'audioinput');
+                    micSelects.forEach(select => {
+                        if (!select) return;
+                        select.innerHTML = '<option value="" style="color:#000;">🎤 Alapértelmezett Mikrofon</option>';
+                        audioInputs.forEach((device, idx) => {
+                            const option = document.createElement('option');
+                            option.value = device.deviceId;
+                            option.textContent = device.label || `Mikrofon ${idx + 1}`;
+                            option.style.color = '#000';
+                            if (device.deviceId === selectedMicDeviceId) option.selected = true;
+                            select.appendChild(option);
+                        });
+                    });
+                })
+                .catch(err => console.warn('Could not enumerate audio devices:', err));
+        }
+
+        function changeMicrophoneDevice(deviceId) {
+            selectedMicDeviceId = deviceId;
+            showNotification('Mikrofon bemeneti eszköz módosítva.');
+            if (localAudioStream && activeMediaCall) {
+                const audioConstraints = deviceId ? { deviceId: { exact: deviceId } } : true;
+                navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false })
+                    .then(newStream => {
+                        const newAudioTrack = newStream.getAudioTracks()[0];
+                        if (activeMediaCall.peerConnection) {
+                            const senders = activeMediaCall.peerConnection.getSenders();
+                            const audioSender = senders.find(s => s.track && s.track.kind === 'audio');
+                            if (audioSender) {
+                                audioSender.replaceTrack(newAudioTrack);
+                            }
+                        }
+                        localAudioStream.getAudioTracks().forEach(t => t.stop());
+                        localAudioStream = newStream;
+                    })
+                    .catch(err => showNotification('Nem sikerült átváltani a kiválasztott mikrofonra.', 'error'));
+            }
+        }
+
+        let activeStreamCallerId = null;
+        let lastRemoteStream = null;
+
+        function showStreamInviteBanner(callerId, callerName) {
+            activeStreamCallerId = callerId;
+            const banner = document.getElementById('stream-invite-banner');
+            const textEl = document.getElementById('stream-invite-text');
+            if (textEl) textEl.textContent = `@${callerName} élő adást / képernyőmegosztást indított!`;
+            if (banner) banner.style.display = 'flex';
+        }
+
+        function hideStreamInviteBanner() {
+            const banner = document.getElementById('stream-invite-banner');
+            if (banner) banner.style.display = 'none';
+        }
+
+        function watchUserStream(targetPeerId) {
+            if (targetPeerId) {
+                activeStreamCallerId = targetPeerId;
+            } else if (!activeStreamCallerId) {
+                for (const pid in knownUsers) {
+                    if (knownUsers[pid].isStreaming && pid !== peer?.id) {
+                        activeStreamCallerId = pid;
+                        break;
+                    }
+                }
+            }
+            acceptStreamInvite();
+        }
+
+        function acceptStreamInvite() {
+            hideStreamInviteBanner();
+
+            // Instantly display stream player container so the user sees the pop-up immediately
+            const callerName = activeStreamCallerId && knownUsers[activeStreamCallerId] ? knownUsers[activeStreamCallerId].username : 'Partner';
+            const container = document.getElementById('discord-stream-container');
+            const title = document.getElementById('docked-stream-title');
+            if (title) title.textContent = `🔴 LIVE Stream @${callerName} (Kapcsolódás...)`;
+            if (container) container.style.display = 'flex';
+
+            if (lastRemoteStream) {
+                showDockedStream(lastRemoteStream, `🔴 LIVE Stream @${callerName}`);
+            }
+
+            // Send P2P request for stream to the target caller or all connections
+            if (activeStreamCallerId) {
+                const conn = connections.find(c => c.peer === activeStreamCallerId);
+                if (conn && conn.open) {
+                    conn.send({ type: 'request_stream_join' });
+                    showNotification(`▶️ Csatlakozás @${callerName} streamjéhez...`);
+                } else {
+                    connections.forEach(c => { if (c.open) c.send({ type: 'request_stream_join' }); });
+                }
+            } else {
+                connections.forEach(c => { if (c.open) c.send({ type: 'request_stream_join' }); });
+            }
+        }
+
+        function dismissStreamInvite() {
+            hideStreamInviteBanner();
+        }
+
+        // Discord-Style Screen Share / Video Streaming (Non-blocking Chat)
+        function startScreenShare(targetPeerId) {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+                showNotification('A böngésződ nem támogatja a képernyőmegosztást (getDisplayMedia)!', 'error');
+                return;
+            }
+
+            showNotification('🖥️ Képernyőmegosztás / Stream választása...');
+
+            navigator.mediaDevices.getDisplayMedia({ video: { cursor: "always" }, audio: true })
+                .then(stream => {
+                    localScreenStream = stream;
+                    
+                    if (peer && peer.id && knownUsers[peer.id]) {
+                        knownUsers[peer.id].isStreaming = true;
+                    }
+                    renderUserList();
+
+                    showDockedStream(stream, `🔴 Saját LIVE Stream - Képernyő Adás`);
+
+                    // Call all active connections with screen stream
+                    connections.forEach(conn => {
+                        if (conn.open) {
+                            peer.call(conn.peer, localScreenStream, { metadata: { type: 'screen-share' } });
+                        }
+                    });
+
+                    broadcast({ type: 'stream_started', callerId: peer.id, callerName: username });
+                    broadcastPresence();
+
+                    // Post automated stream announcement message to current active chat topic
+                    if (currentTopic) {
+                        const streamMsg = {
+                            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                            content: `🖥️ Élő adást / képernyőmegosztást indítottam!`,
+                            username: username,
+                            timestamp: new Date().toISOString(),
+                            isStreamAnnouncement: true,
+                            streamCallerId: peer.id
+                        };
+                        if (!data.messages[currentTopic]) {
+                            data.messages[currentTopic] = [];
+                        }
+                        data.messages[currentTopic].push(streamMsg);
+                        saveData();
+                        renderMessages();
+                        broadcast({
+                            type: 'new_message',
+                            topicId: currentTopic,
+                            message: streamMsg
+                        });
+                    }
+
+                    stream.getVideoTracks()[0].onended = () => {
+                        stopScreenShare();
+                    };
+                })
+                .catch(err => {
+                    if (err.name !== 'NotAllowedError') {
+                        console.error('Screen share error:', err);
+                        showNotification('Nem sikerült elindítani a képernyőmegosztást.', 'error');
+                    }
+                });
+        }
+
+        function togglePipMode() {
+            const container = document.getElementById('discord-stream-container');
+            const btn = document.getElementById('pip-toggle-btn');
+            if (!container) return;
+            container.classList.toggle('is-pip');
+            const isPip = container.classList.contains('is-pip');
+            if (btn) btn.textContent = isPip ? '📌 Beillesztés Chatbe' : '📌 Mini Nézet (PIP)';
+            showNotification(isPip ? 'Stream átváltva lebegő mini-lejátszó módba!' : 'Stream visszaillesztve a chat tetejére.');
+        }
+
+        function showDockedStream(stream, titleText) {
+            const container = document.getElementById('discord-stream-container');
+            const video = document.getElementById('docked-stream-video');
+            const title = document.getElementById('docked-stream-title');
+
+            if (title) title.textContent = titleText || '🔴 LIVE Stream';
+            if (video) {
+                if (video.srcObject !== stream) {
+                    video.srcObject = stream;
+                }
+                video.play().catch(err => {
+                    console.warn('Autoplay with sound blocked by browser, attempting muted playback:', err);
+                    video.muted = true;
+                    video.play().catch(e => console.error('Video play failed:', e));
+                });
+            }
+            if (container) container.style.display = 'flex';
+        }
+
+        function leaveStream() {
+            const container = document.getElementById('discord-stream-container');
+            const video = document.getElementById('docked-stream-video');
+            if (video) {
+                video.srcObject = null;
+            }
+            if (container) container.style.display = 'none';
+
+            if (localScreenStream) {
+                localScreenStream.getTracks().forEach(t => t.stop());
+                localScreenStream = null;
+            }
+            if (activeScreenCall) {
+                try { activeScreenCall.close(); } catch(e) {}
+                activeScreenCall = null;
+            }
+        }
+
+        function stopScreenShare() {
+            broadcast({ type: 'stream_ended', callerId: peer.id, callerName: username });
+            leaveStream();
+            showNotification('Képernyőmegosztás leállítva.');
+        }
+
+        function toggleStreamFullscreen() {
+            const video = document.getElementById('docked-stream-video');
+            if (!video) return;
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                video.requestFullscreen().catch(e => console.warn('Fullscreen error:', e));
+            }
+        }
+
+        function showActiveCallBar(remoteUsername) {
+            const bar = document.getElementById('active-call-bar');
+            const userEl = document.getElementById('active-call-user');
+            if (userEl) userEl.textContent = `🎙️ Hanghívás: @${remoteUsername}`;
+            if (bar) bar.style.display = 'flex';
+
+            updateMicrophoneList();
+
+            callStartTime = Date.now();
+            if (callTimerInterval) clearInterval(callTimerInterval);
+            callTimerInterval = setInterval(() => {
+                const elapsedSec = Math.floor((Date.now() - callStartTime) / 1000);
+                const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+                const secs = String(elapsedSec % 60).padStart(2, '0');
+                const timerEl = document.getElementById('active-call-timer');
+                if (timerEl) timerEl.textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function toggleMuteMicrophone() {
+            if (localAudioStream) {
+                const audioTrack = localAudioStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    audioTrack.enabled = !audioTrack.enabled;
+                    isMicMuted = !audioTrack.enabled;
+                    const btn = document.getElementById('mute-mic-btn');
+                    if (btn) btn.textContent = isMicMuted ? '🎙️ Némítás Feloldása' : '🎤 Némítás';
+                    showNotification(isMicMuted ? 'Mikrofon elnémítva' : 'Mikrofon bekapcsolva');
+                }
+            }
+        }
+
+        function endVoiceCall() {
+            if (activeMediaCall) {
+                try { activeMediaCall.close(); } catch(e) {}
+            }
+            endVoiceCallCleanup();
+            showNotification('Hanghívás befejezve.');
+        }
+
+        function endVoiceCallCleanup() {
+            activeMediaCall = null;
+            if (localAudioStream) {
+                localAudioStream.getTracks().forEach(track => track.stop());
+                localAudioStream = null;
+            }
+            if (callTimerInterval) {
+                clearInterval(callTimerInterval);
+                callTimerInterval = null;
+            }
+            const bar = document.getElementById('active-call-bar');
+            if (bar) bar.style.display = 'none';
+
+            const audioPlayer = document.getElementById('remote-audio-player');
+            if (audioPlayer) {
+                audioPlayer.srcObject = null;
+            }
+        }
+
+        function removeUser(peerId) {
+            const userInfo = knownUsers[peerId];
+            const name = userInfo ? userInfo.username : peerId;
+            if (confirm(`Biztosan törölni akarod a(z) "${name}" (${peerId}) felhasználót a saját listádról?`)) {
+                delete knownUsers[peerId];
+                saveKnownUsers();
+                renderUserList();
+                showNotification('Felhasználó eltávolítva a listádról!');
+            }
+        }
+
+        function connectToPeerById(peerId) {
+            if (peerId === peer.id) {
+                showNotification('Nem csatlakozhatsz saját magadhoz!', 'error');
+                return;
+            }
+
+            const isConnected = connections.some(c => c.peer === peerId);
+            if (isConnected) {
+                showNotification('Már kapcsolódva vagy ehhez a peerhez!', 'error');
+                return;
+            }
+
+            const conn = peer.connect(peerId);
+            handleConnection(conn);
+            showNotification('Csatlakozás folyamatban...');
+        }
+
+        // Topic management
+        function createTopic() {
+            const input = document.getElementById('new-topic-input');
+            const name = input.value.trim();
+            
+            if (!name) {
+                showNotification('Kérlek adj meg egy topik nevet!', 'error');
+                return;
+            }
+
+            const topicId = Date.now().toString();
+            const topic = {
+                id: topicId,
+                name: name,
+                createdBy: username,
+                createdAt: new Date().toISOString()
+            };
+
+            data.topics[topicId] = topic;
+            data.messages[topicId] = [];
+            saveData();
+
+            broadcast({
+                type: 'new_topic',
+                topicId: topicId,
+                topic: topic
+            });
+
+            input.value = '';
+            renderTopics();
+            selectTopic(topicId);
+            showNotification('Topik létrehozva!');
+        }
+
+        function selectTopic(topicId) {
+            currentTopic = topicId;
+            const topic = data.topics[topicId];
+            document.getElementById('current-topic-name').textContent = topic ? topic.name : '';
+            const exportBtn = document.getElementById('export-txt-btn');
+            if (exportBtn) exportBtn.style.display = 'inline-block';
+            renderTopics();
+            renderMessages();
+        }
+
+        function renderTopics() {
+            const list = document.getElementById('topic-list');
+            list.innerHTML = '';
+
+            for (const topicId in data.topics) {
+                const topic = data.topics[topicId];
+                const messageCount = data.messages[topicId] ? data.messages[topicId].length : 0;
+                
+                const li = document.createElement('li');
+                li.className = 'topic-item' + (currentTopic === topicId ? ' active' : '');
+                li.innerHTML = `
+                    <div class="topic-info">
+                        <div class="topic-name">${escapeHtml(topic.name)}</div>
+                        <div class="topic-count">${messageCount} üzenet ${topic.createdBy ? '• ' + escapeHtml(topic.createdBy) : ''}</div>
+                    </div>
+                    <button class="delete-topic-btn" onclick="deleteTopic(event, '${topicId}')" title="Topik törlése a saját gépedről">🗑️</button>
+                `;
+                li.onclick = () => selectTopic(topicId);
+                list.appendChild(li);
+            }
+        }
+
+        function deleteTopic(event, topicId) {
+            event.stopPropagation();
+            const topic = data.topics[topicId];
+            const topicName = topic ? topic.name : 'ezt a topikot';
+
+            if (confirm(`Biztosan törölni akarod a(z) "${topicName}" topikot a saját gépedről?`)) {
+                delete data.topics[topicId];
+                delete data.messages[topicId];
+
+                if (!deletedTopicIds.includes(topicId)) {
+                    deletedTopicIds.push(topicId);
+                    saveDeletedTopics();
+                }
+
+                if (currentTopic === topicId) {
+                    currentTopic = null;
+                    document.getElementById('current-topic-name').textContent = 'Válassz egy topikot';
+                    const exportBtn = document.getElementById('export-txt-btn');
+                    if (exportBtn) exportBtn.style.display = 'none';
+                    renderMessages();
+                }
+
+                saveData();
+                renderTopics();
+                showNotification('Topik törölve a saját gépedről!');
+            }
+        }
+
+        function resyncTopics() {
+            deletedTopicIds = [];
+            saveDeletedTopics();
+            showNotification('Törölt topikok tiltólistája ürítve. Szinkronizálás...');
+            
+            let count = 0;
+            connections.forEach(conn => {
+                if (conn.open) {
+                    conn.send({ type: 'sync_request' });
+                    count++;
+                }
+            });
+            
+            if (count === 0) {
+                showNotification('Nincs aktív peer kapcsolat. Újracsatlakozás az ismerősökhöz...');
+                autoReconnect();
+            }
+        }
+
+        function exportTopicToTxt(topicIdToExport = currentTopic) {
+            if (!topicIdToExport || !data.topics[topicIdToExport]) {
+                showNotification('Nincs kiválasztva topik az exportáláshoz!', 'error');
+                return;
+            }
+
+            const topic = data.topics[topicIdToExport];
+            const messages = data.messages[topicIdToExport] || [];
+            const now = new Date();
+            const exportDateStr = now.toLocaleString('hu-HU');
+
+            let txtContent = `==================================================\n`;
+            txtContent += `TOPIK: ${topic.name}\n`;
+            txtContent += `Létrehozta: ${topic.createdBy || 'Ismeretlen'}\n`;
+            txtContent += `Létrehozva: ${topic.createdAt ? new Date(topic.createdAt).toLocaleString('hu-HU') : 'N/A'}\n`;
+            txtContent += `Exportálva: ${exportDateStr}\n`;
+            txtContent += `Összes üzenet: ${messages.length}\n`;
+            txtContent += `==================================================\n\n`;
+
+            if (messages.length === 0) {
+                txtContent += `(Még nincsenek üzenetek ebben a topikban)\n`;
+            } else {
+                messages.forEach(msg => {
+                    const dateObj = new Date(msg.timestamp);
+                    const dateStr = dateObj.toLocaleDateString('hu-HU');
+                    const timeStr = dateObj.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    
+                    let lineStr = `[${dateStr} ${timeStr}] ${msg.username}:\n`;
+                    if (msg.replyTo) {
+                        lineStr += `  └─> [Válasz neki: @${msg.replyTo.username}: "${msg.replyTo.content ? msg.replyTo.content.substring(0, 50) : ''}..."]\n`;
+                    }
+                    if (msg.content) {
+                        lineStr += `${msg.content}\n`;
+                    }
+                    if (msg.attachment) {
+                        lineStr += `  [Csatolt fájl/kép: ${msg.attachment.name} (${formatFileSize(msg.attachment.size)})]\n`;
+                    }
+                    txtContent += lineStr + `\n`;
+                });
+            }
+
+            const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            
+            const safeTopicName = topic.name.replace(/[^a-zA-Z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ_-]/g, '_');
+            const dateFileStr = now.toISOString().slice(0, 10);
+            
+            link.href = url;
+            link.download = `topik_${safeTopicName}_${dateFileStr}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showNotification(`"${topic.name}" letöltve TXT fájlként!`);
+        }
+
+        // File upload & Reply handlers
+        function startReply(msgId, msgUsername, msgContent) {
+            replyToMessage = {
+                id: msgId,
+                username: msgUsername,
+                content: msgContent
+            };
+            const previewContainer = document.getElementById('reply-preview');
+            const previewInfo = document.getElementById('reply-preview-info');
+            const shortContent = msgContent ? msgContent.substring(0, 60) : 'Csatolt fájl';
+            
+            previewInfo.innerHTML = `↩️ <strong>Válasz neki: @${escapeHtml(msgUsername)}</strong>: "${escapeHtml(shortContent)}${msgContent && msgContent.length > 60 ? '...' : ''}"`;
+            previewContainer.style.display = 'flex';
+            document.getElementById('message-input').focus();
+        }
+
+        function cancelReply() {
+            replyToMessage = null;
+            const previewContainer = document.getElementById('reply-preview');
+            if (previewContainer) previewContainer.style.display = 'none';
+        }
+
+        function triggerFileSelect() {
+            document.getElementById('file-input').click();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            showNotification('Fájl feldolgozása...');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                
+                // Store actual file data in local hostedFiles cache
+                hostedFiles[fileId] = {
+                    fileId: fileId,
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    data: e.target.result
+                };
+                saveHostedFiles();
+
+                // Store metadata for message broadcasting (WITHOUT heavy base64 data)
+                selectedFile = {
+                    fileId: fileId,
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    uploaderPeerId: peer ? peer.id : ''
+                };
+                
+                showFilePreview();
+                showNotification('Fájl csatolva!');
+            };
+            reader.onerror = function() {
+                showNotification('Hiba történt a fájl beolvasásakor!', 'error');
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function downloadP2PFile(fileId, uploaderPeerId) {
+            if (hostedFiles[fileId] && hostedFiles[fileId].data) {
+                triggerBrowserDownload(hostedFiles[fileId]);
+                return;
+            }
+
+            if (connections.length === 0) {
+                showNotification('Nincs aktív P2P kapcsolat! Csatlakozz a feltöltőhöz a letöltéshez.', 'error');
+                return;
+            }
+
+            let sentCount = 0;
+            connections.forEach(conn => {
+                try {
+                    conn.send({
+                        type: 'request_file_data',
+                        fileId: fileId,
+                        requesterPeerId: peer ? peer.id : ''
+                    });
+                    sentCount++;
+                } catch (e) {
+                    console.error('Error sending file request:', e);
+                }
+            });
+
+            if (sentCount > 0) {
+                showNotification(`📥 Fájl letöltésének kérése a peerektől...`);
+            } else {
+                showNotification(`❌ Nem sikerült kérést küldeni a peereknek.`, 'error');
+            }
+        }
+
+        function triggerBrowserDownload(fileObj) {
+            const link = document.createElement('a');
+            link.href = fileObj.data;
+            link.download = fileObj.name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification(`"${fileObj.name}" sikeresen letöltve!`);
+        }
+
+        function showFilePreview() {
+            const container = document.getElementById('file-preview');
+            if (!selectedFile) {
+                container.style.display = 'none';
+                return;
+            }
+            const isImg = selectedFile.type && selectedFile.type.startsWith('image/');
+            const icon = isImg ? '🖼️' : '📄';
+            const sizeStr = formatFileSize(selectedFile.size);
+            
+            document.getElementById('file-preview-info').innerHTML = `${icon} <strong>${escapeHtml(selectedFile.name)}</strong> (${sizeStr})`;
+            container.style.display = 'flex';
+        }
+
+        function removeSelectedFile() {
+            selectedFile = null;
+            const container = document.getElementById('file-preview');
+            if (container) container.style.display = 'none';
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes) return '0 B';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // Message management
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const content = input.value.trim();
+            
+            if (!content && !selectedFile) {
+                return;
+            }
+
+            if (!currentTopic) {
+                showNotification('Kérlek válassz egy topikot!', 'error');
+                return;
+            }
+
+            const message = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                content: content,
+                username: username,
+                timestamp: new Date().toISOString(),
+                attachment: selectedFile ? { ...selectedFile } : null,
+                replyTo: replyToMessage ? { ...replyToMessage } : null
+            };
+
+            if (!data.messages[currentTopic]) {
+                data.messages[currentTopic] = [];
+            }
+            data.messages[currentTopic].push(message);
+            saveData();
+
+            broadcast({
+                type: 'new_message',
+                topicId: currentTopic,
+                message: message
+            });
+
+            playMsnSound('send');
+
+            input.value = '';
+            removeSelectedFile();
+            cancelReply();
+            renderMessages();
+        }
+
+        function formatMessageContent(content) {
+            if (!content) return '';
+            let text = escapeHtml(content);
+
+            // Direct video file URLs (.mp4, .webm, .ogv) -> inline video player
+            const directVideoRegex = /(https?:\/\/\S+\.(?:mp4|webm|ogv))(?:\S*)?/gi;
+            text = text.replace(directVideoRegex, function(match, url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: underline;">${url}</a><br><video controls src="${url}" style="max-width: 100%; max-height: 320px; border-radius: 8px; margin-top: 6px; display: block;"></video>`;
+            });
+
+            // Convert all web URLs (including YouTube links) to clean clickable links opening in a new tab
+            const urlRegex = /(?<!src="|href=")(https?:\/\/[^\s<]+)/gi;
+            text = text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: underline;">${url}</a>`;
+            });
+
+            // Convert MSN emojis
+            text = replaceMsnEmojis(text);
+
+            return text;
+        }
+
+        function jumpToMessage(msgId) {
+            if (!msgId) return;
+            const el = document.getElementById('msg-' + msgId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.style.transition = 'outline 0.3s, transform 0.3s';
+                el.style.outline = '3px solid var(--primary-color)';
+                el.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    el.style.outline = 'none';
+                    el.style.transform = 'none';
+                }, 1500);
+            } else {
+                showNotification('Az eredeti üzenet nem található ebben a nézetben.', 'error');
+            }
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('messages');
+            
+            if (!currentTopic || !data.messages[currentTopic]) {
+                container.innerHTML = '<div class="empty-state">Válassz egy topikot a beszélgetéshez</div>';
+                return;
+            }
+
+            const messages = data.messages[currentTopic];
+            container.innerHTML = '';
+
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.id = 'msg-' + msg.id;
+                div.className = msg.isNudge ? 'message nudge-message-box' : ('message' + (msg.username === username ? ' own' : ''));
+                
+                const date = new Date(msg.timestamp);
+                const timeStr = date.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
+                
+                let replyQuoteHtml = '';
+                if (msg.replyTo) {
+                    const replyText = msg.replyTo.content ? msg.replyTo.content.substring(0, 70) : (msg.replyTo.attachment ? '📎 Csatolt fájl' : '');
+                    replyQuoteHtml = `
+                        <div class="message-reply-quote" onclick="jumpToMessage('${msg.replyTo.id}')" style="cursor: pointer;" title="Kattints az eredeti üzenethez ugráshoz 🎯">
+                            <strong>@${escapeHtml(msg.replyTo.username)}</strong>: ${escapeHtml(replyText)}${msg.replyTo.content && msg.replyTo.content.length > 70 ? '...' : ''}
+                        </div>
+                    `;
+                }
+
+                let attachmentHtml = '';
+                if (msg.attachment) {
+                    const fileId = msg.attachment.fileId;
+                    const uploaderId = msg.attachment.uploaderPeerId || msg.username;
+                    const isUploaderOnline = connections.some(c => c.peer === uploaderId && c.open) || (peer && uploaderId === peer.id);
+                    const fileObj = fileId ? hostedFiles[fileId] : (msg.attachment.data ? msg.attachment : null);
+
+                    if (fileObj && fileObj.data) {
+                        const isImg = fileObj.type && fileObj.type.startsWith('image/');
+                        const isVideo = fileObj.type && fileObj.type.startsWith('video/');
+                        if (isImg) {
+                            attachmentHtml = `
+                                <div class="message-attachment">
+                                    <a href="${fileObj.data}" target="_blank">
+                                        <img src="${fileObj.data}" alt="${escapeHtml(fileObj.name)}" title="Kattints a nagyításhoz">
+                                    </a>
+                                </div>
+                            `;
+                        } else if (isVideo) {
+                            attachmentHtml = `
+                                <div class="message-attachment">
+                                    <video controls src="${fileObj.data}" style="max-width: 100%; max-height: 320px; border-radius: 8px; display: block;"></video>
+                                </div>
+                            `;
+                        } else {
+                            const sizeStr = formatFileSize(fileObj.size || 0);
+                            attachmentHtml = `
+                                <div class="message-attachment">
+                                    <a href="${fileObj.data}" download="${escapeHtml(fileObj.name)}" class="file-download-box">
+                                        <span>📎</span>
+                                        <span><strong>${escapeHtml(fileObj.name)}</strong> (${sizeStr})</span>
+                                        <span>📥</span>
+                                    </a>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        const sizeStr = formatFileSize(msg.attachment.size || 0);
+                        attachmentHtml = `
+                            <div class="message-attachment">
+                                <div class="file-download-box" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                                    <div>📎 <strong>${escapeHtml(msg.attachment.name)}</strong> (${sizeStr})</div>
+                                    <div style="font-size: 11px; opacity: 0.7;">Feltöltő: @${escapeHtml(uploaderId)} (${isUploaderOnline ? '🟢 Online' : '🔴 Offline'})</div>
+                                    <button class="btn btn-primary" onclick="downloadP2PFile('${fileId}', '${uploaderId}')" style="margin-top: 4px; font-size: 12px; padding: 4px 10px;">
+                                        ${isUploaderOnline ? '📥 P2P Letöltés indítása' : '🔴 Feltöltő offline'}
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                const formattedContent = msg.content ? formatMessageContent(msg.content) : '';
+                const msgContentForReply = JSON.stringify(msg.content || (msg.attachment ? msg.attachment.name : '')).replace(/'/g, "\\'");
+                
+                div.className = 'message' + (msg.username === username ? ' own' : '') + (msg.pinned ? ' is-pinned' : '');
+
+                let streamCardHtml = '';
+                if (msg.isStreamAnnouncement) {
+                    streamCardHtml = `
+                        <div style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 10px 14px; border-radius: 8px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 20px;">🖥️</span>
+                                <div>
+                                    <strong style="font-size: 13.5px;">@${escapeHtml(msg.username)} élő adást / képernyőmegosztást indított!</strong>
+                                    <div style="font-size: 11px; opacity: 0.9;">Kattints a gombra a stream élő nézéséhez</div>
+                                </div>
+                            </div>
+                            <button onclick="watchUserStream('${msg.streamCallerId || ''}')" class="btn" style="background: #22c55e; color: white; font-weight: bold; padding: 6px 14px; font-size: 12px; cursor: pointer; border: none; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">▶️ Csatlakozás a Streamhez</button>
+                        </div>
+                    `;
+                }
+
+                div.innerHTML = `
+                    <div>
+                        <span class="username">${escapeHtml(msg.username)}</span>
+                        <span class="timestamp">${timeStr}</span>
+                        <button class="reply-btn" onclick='startReply("${msg.id}", "${escapeHtml(msg.username)}", ${msgContentForReply})' title="Válasz erre az üzenetre">↩️ Válasz</button>
+                        <button class="pin-btn" onclick='togglePinMessage("${msg.id}")' title="${msg.pinned ? 'Rögzítés feloldása' : 'Üzenet rögzítése az oldalsávra'}">${msg.pinned ? '📌 Kitűzve' : '📌 Pin'}</button>
+                    </div>
+                    ${replyQuoteHtml}
+                    ${formattedContent ? `<div class="content">${formattedContent}</div>` : ''}
+                    ${streamCardHtml}
+                    ${attachmentHtml}
+                `;
+                container.appendChild(div);
+            });
+
+            container.scrollTop = container.scrollHeight;
+            renderRightPanel();
+        }
+
+        function saveDeletedTopics() {
+            localStorage.setItem('p2p_deleted_topics', JSON.stringify(deletedTopicIds));
+        }
+
+        function loadDeletedTopics() {
+            const saved = localStorage.getItem('p2p_deleted_topics');
+            if (saved) {
+                try {
+                    deletedTopicIds = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading deleted topics:', e);
+                    deletedTopicIds = [];
+                }
+            }
+        }
+
+        // Data persistence
+        function saveData() {
+            localStorage.setItem('p2p_reddit_data', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('p2p_reddit_data');
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Biztosan törölni akarod az összes adatot? Ez nem visszavonható!')) {
+                localStorage.removeItem('p2p_reddit_data');
+                localStorage.removeItem('p2p_username');
+                localStorage.removeItem('p2p_known_users');
+                localStorage.removeItem('p2p_deleted_topics');
+                // Note: We keep p2p_peer_id to maintain identity
+                data = { topics: {}, messages: {} };
+                knownUsers = {};
+                deletedTopicIds = [];
+                currentTopic = null;
+                renderTopics();
+                renderMessages();
+                renderUserList();
+                showNotification('Összes adat törölve!');
+                
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }
+
+        // Utilities
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            if (type === 'error') {
+                notification.style.background = '#ef4444';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>
