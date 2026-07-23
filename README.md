@@ -1,51 +1,40 @@
-# 🌐 P2P Reddit - Szerver Nélküli Decentralizált Chat & Fórum
+# 🌐 P2P Reddit MSN - Szerver Nélküli Decentralizált Chat & Fórum (v4.0)
 
 Egy teljesen szerverfüggetlen, **Peer-to-Peer (P2P)** alapú közösségi chat és fórum alkalmazás **WebRTC** technológiával. Nem igényel központi szervert az üzenetváltáshoz, fájlmegosztáshoz, hanghívásokhoz és élő közvetítésekhez!
 
 ---
 
-## 🚀 Élő Online Chat (GitHub Pages)
+## 🚀 Élő Online Chat (GitHub Pages - v4.0)
 
-Bárhonnan azonnal megnyitható a legújabb verzió:
+A legújabb v4.0 verzió azonnal elérhető és használható a böngésződben:
 👉 **[https://adamcsaka.github.io/ChatTT/](https://adamcsaka.github.io/ChatTT/)**
-
-*Minden Git feltöltéssel (git push) az online verzió automatikusan frissül a legújabb kódra!*
 
 ---
 
-## ⚡ Főbb Funkciók (v3.2)
+## ⚡ Főbb Funkciók (v4.0)
 
-* 🎨 **Beágyazott Base64 Smiley & Web Audio Hang integráció**:
-  * Az emoji gomb képe (`emoticons/smile.png`) automata **Base64 Data URI SVG tartalék-rendszert** kapott, így a felület 100%-ban működik hiányzó fájlok esetén is!
-  * Az üzenethangok (MSN Chime, Rezgés, Pop, Bell) teljesen beágyazott **Web Audio API szintetizátorral** szólalnak meg, külső fájlfüggőségek nélkül.
+* 🎨 **Beágyazott Base64 / SVG Smiley-k & Bővített Emojik**:
+  * Az emoji gomb és a smileiy-k **Base64 Data URI SVG tartalék-rendszert** kaptak, így hiányzó fájlok esetén is 100%-ban működik a felület.
+  * Bővített, 80+ elemből álló emoji és emotikon választó rács.
+* 🎵 **Beépített Web Audio API Hangszintetizátor**:
+  * MSN csengőhangok, rezgések és hívási jelzések valós időben szintetizálódnak, nullára csökkentve a külső audio fájlfüggőséget.
 * 👥 **Tartós Ismerős Törlés & Böngészőfrissítés Védelem**:
-  * Törölt peerek/ismerősök eltárolása (`deletedUserIds`).
-  * Böngészőfrissítés után a törölt ismerősök **NEM térnek vissza automatikusan**, a megjegyzett beállítások fogadnak.
+  * A törölt ismerősök megőrződnek (`deletedUserIds`), így frissítés után **NEM térnek vissza**.
 * 🔄 **Interaktív Szinkronizálási Menü (Sync Options Modal)**:
-  * A `🔄 Szinkronizálás` gombra kattintva felugró menüből választhatsz:
-    1. 💬 **Csak Topikok szinkronizálása**
-    2. 👥 **Csak Ismerősök & Peerek szinkronizálása**
-    3. 🔄 **Mindent szinkronizál (Topikok + Ismerősök)**
-  * Pipálható opció a törölt ismerősök szándékos visszaállítására.
+  * A `🔄 Szinkronizálás` gombra kattintva választási lehetőség: Topikok / Ismerősök / Teljes szinkronizálás.
 * 📌 **Megjegyzett Állapotok & Aktuális Topik**:
-  * Az éppen megnyitott topik, sávszélességek, színek, üzenethangok és beállítások megőrződnek frissítés után is.
+  * Az éppen megnyitott topik, sávszélességek, színek, üzenethangok és beállítások frissítés után is megőrződnek.
 * 🎙️ **P2P Hanghívások & 🎥 Élő Streamelések (WebRTC)**:
   * Mikrofon alapú **hanghívások** és képernyő/kamera **élő közvetítések** (Stream).
-  * **Instant Stream Player Popup**: Az élő adás vagy hívás azonnal megnyílik egy beágyazott lejátszó ablakban.
-  * **Autoplay Kötöttségek Feloldása**: Böngészős tiltások automatikus kezelése engedélyező gombbal.
-* ↔️ **Átméretezhető Felület (Resizable Divider)**:
+* ↔️ **Átméretezhető Felület (Total Commander stílusú Divider)**:
   * A bal oldali topik/felhasználó sáv és a chat ablak közötti elválasztóvonal szabadon **húzható és átméretezhető**.
-* 📌 **Rögzített Üzenetek & Média Felugró Ablak (Modal Window)**:
-  * Kényelmes felugró ablak a pineknek és médiafájloknak.
-* 📥 **TXT Beszélgetés Exportálás**:
-  * Beszélgetések azonnali mentése és letöltése `.txt` fájlként.
-* 🫨 **MSN Nudge / Rezgetés**:
-  * Megrezgethető ablakok a klasszikus MSN Messenger stílusában.
+* 📱 **Android Applikáció Projekt (`v4-android` ág)**:
+  * Kész Android Studio WebView app projekt WebRTC engedélykezeléssel a `v4-android/AndroidApp/` mappában és a `v4-android` Git ágon!
 
 ---
 
 ## 🚀 Használat
 
-1. Nyisd meg a **[https://adamcsaka.github.io/ChatTT/](https://adamcsaka.github.io/ChatTT/)** címe a böngésződben (vagy helyileg az `index.html` fájlt).
+1. Nyisd meg a **[https://adamcsaka.github.io/ChatTT/](https://adamcsaka.github.io/ChatTT/)** címet a böngésződben.
 2. Add meg a felhasználónevedet és a Peer ID-dat (pl. `1` vagy `2`).
-3. Csatlakozz az ismerőseidhez és használd a P2P funkciókat!
+3. Csatlakozz az ismerőseidhez és használd a P2P chatet!
